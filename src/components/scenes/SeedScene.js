@@ -1,7 +1,8 @@
 import * as Dat from 'dat.gui';
-import { Scene, Color } from 'three';
+import { Scene, Color, PlaneGeometry, MeshBasicMaterial, Mesh } from 'three';
 import { Flower, Land } from 'objects';
 import { BasicLights } from 'lights';
+import { Penguin } from '../objects';
 
 class SeedScene extends Scene {
     constructor() {
@@ -18,11 +19,17 @@ class SeedScene extends Scene {
         // Set background to a nice color
         this.background = new Color(0x7ec0ee);
 
+        // Trying things out.
+        //const geo = new PlaneGeometry(100, 100);
+        //const planeMaterial = new MeshBasicMaterial({color: 0xff00f0});
+        //const plane = new Mesh(geo, planeMaterial);
+
         // Add meshes to scene
         const land = new Land();
         const flower = new Flower(this);
         const lights = new BasicLights();
-        this.add(land, flower, lights);
+        const penguin = new Penguin();
+        this.add(land, flower, lights, penguin);
 
         // Populate GUI
         this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
