@@ -4,7 +4,7 @@ import { Flower, Land } from 'objects';
 import { BasicLights } from 'lights';
 import { Penguin } from '../objects';
 
-class SeedScene extends Scene {
+class GameScene extends Scene {
     constructor() {
         // Call parent Scene() constructor
         super();
@@ -14,6 +14,7 @@ class SeedScene extends Scene {
             gui: new Dat.GUI(), // Create GUI for scene
             rotationSpeed: 1,
             updateList: [],
+            penguin: null,
         };
 
         // Set background to a nice color
@@ -25,14 +26,17 @@ class SeedScene extends Scene {
         //const plane = new Mesh(geo, planeMaterial);
 
         // Add meshes to scene
-        const land = new Land();
-        const flower = new Flower(this);
         const lights = new BasicLights();
-        const penguin = new Penguin();
-        this.add(land, flower, lights, penguin);
+        this.state.penguin = new Penguin();
+        this.add(lights, this.state.penguin);
 
         // Populate GUI
-        this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
+        //this.state.gui.add(this.state.penguin, 'rotationSpeed', -5, 5);
+    }
+
+    /** Pass along key events to all objects in this scene. */
+    handleKeyEvents(event) {
+        this.state.penguin.handleKeyEvents(event);
     }
 
     addToUpdateList(object) {
@@ -50,4 +54,4 @@ class SeedScene extends Scene {
     }
 }
 
-export default SeedScene;
+export default GameScene;
