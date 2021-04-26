@@ -1,5 +1,5 @@
 import * as Dat from 'dat.gui';
-import { Scene, Color, PlaneGeometry, MeshBasicMaterial, Mesh } from 'three';
+import { Scene, Color, PlaneGeometry, MeshBasicMaterial, Mesh, Vector3 } from 'three';
 import { Flower, Land } from 'objects';
 import { BasicLights } from 'lights';
 import { Penguin } from '../objects';
@@ -12,7 +12,7 @@ class GameScene extends Scene {
         // Init state
         this.state = {
             gui: new Dat.GUI(), // Create GUI for scene
-            rotationSpeed: 1,
+            rotationSpeed: 0,
             updateList: [],
             penguin: null,
         };
@@ -20,15 +20,18 @@ class GameScene extends Scene {
         // Set background to a nice color
         this.background = new Color(0x7ec0ee);
 
-        // Trying things out.
-        //const geo = new PlaneGeometry(100, 100);
-        //const planeMaterial = new MeshBasicMaterial({color: 0xff00f0});
-        //const plane = new Mesh(geo, planeMaterial);
+        // Create the ramp plane
+        const geo = new PlaneGeometry(20, 100);
+        const planeMaterial = new MeshBasicMaterial({color: 0xffffff});
+        const plane = new Mesh(geo, planeMaterial);
+        plane.position.set(0, -0.5, 0);
+        plane.lookAt(new Vector3(0, 1, 0));
+        
 
         // Add meshes to scene
         const lights = new BasicLights();
         this.state.penguin = new Penguin();
-        this.add(lights, this.state.penguin);
+        this.add(lights, this.state.penguin, plane);
 
         // Populate GUI
         //this.state.gui.add(this.state.penguin, 'rotationSpeed', -5, 5);
