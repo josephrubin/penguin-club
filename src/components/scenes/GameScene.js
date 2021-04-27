@@ -50,6 +50,9 @@ class GameScene extends Scene {
         if (event.code in this.state.keys) {
             this.state.keys[event.code] = true;
         }
+
+        // Notify objects about key down.
+        this.state.penguin.handleKeyDown(event);
     }
     handleKeyUp(event) {
         if (event.code in this.state.keys) {

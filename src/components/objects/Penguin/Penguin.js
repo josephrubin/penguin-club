@@ -18,6 +18,14 @@ class Penguin extends THREE.Group {
         this.penguin = new THREE.Mesh(penguinGeometry, penguinMaterial);
         this.position.set(0, 0, 0);
         this.add(this.penguin);
+
+        this.onFloor = true;
+    }
+
+    handleKeyDown(event) {
+        if (event.code === "Space" && this.onFloor) {
+            this.netForce.add(new THREE.Vector3(0, 80, 0));
+        }
     }
 
     update(timeStamp, state) {
@@ -32,6 +40,9 @@ class Penguin extends THREE.Group {
         // Friction - opposes movement.
         this.velocity.multiplyScalar(0.97);
 
+        // Gravity - the all natural force that brings us together.
+        this.netForce.add(new THREE.Vector3(0, -4, 0));
+
         // Semi-Implicit Euler integration.
         // ref: https://gafferongames.com/post/integration_basics/
         const acceleration = new THREE.Vector3()
@@ -43,13 +54,23 @@ class Penguin extends THREE.Group {
         // Collisions.
         const leftBoundary = -9.5;
         const rightBoundary = 9.5;
+        const bottomBoundary = 0;
+        // Left wall.
         if (this.penguin.position.x < leftBoundary) {
             this.penguin.position.x = leftBoundary;
             this.velocity.x = 0;
         }
+        // Right wall.
         if (this.penguin.position.x > rightBoundary) {
             this.penguin.position.x = rightBoundary;
             this.velocity.x = 0;
+        }
+        // Floor.
+        this.onFloor = false;
+        if (this.penguin.position.y <= bottomBoundary) {
+            this.penguin.position.y = bottomBoundary;
+            this.velocity.y = 0;
+            this.onFloor = true;
         }
     }
 }
