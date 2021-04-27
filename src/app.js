@@ -57,5 +57,9 @@ windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
 
 window.addEventListener("keydown", function(e) {
-    scene.handleKeyEvents(e)
+    scene.handleKeyDown(e)
+}, false);
+
+window.addEventListener("keyup", function(e) {
+    scene.handleKeyUp(e)
 }, false);

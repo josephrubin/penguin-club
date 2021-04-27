@@ -27,11 +27,11 @@ class Hazard extends THREE.Group {
 
     // Code copied from flower -- adjust so that box translates in the
     // positive z direction
-    update(timeStamp, penguin) {
+    update(timeStamp, state) {
         // Stack overflow for collision detection:
         // https://stackoverflow.com/questions/28453895/how-to-detect-collision-between-two-objects-in-javascript-with-three-js
         const hazardBox = new THREE.Box3().setFromObject(this.hazard);
-        const penguinBox = new THREE.Box3().setFromObject(penguin);
+        const penguinBox = new THREE.Box3().setFromObject(state.penguin);
         const collision = hazardBox.intersectsBox(penguinBox);
         if (collision) {
             this.state.move = false;

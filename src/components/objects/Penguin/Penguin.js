@@ -6,6 +6,11 @@ class Penguin extends THREE.Group {
         // Call parent Group() constructor
         super();
 
+        // Physics.
+        this.netForce = new THREE.Vector3(0, 0, 0);
+        this.velocity = new THREE.Vector3(0, 0, 0);
+        this.mass = 100;
+
         const penguinGeometry = new THREE.BoxGeometry(1, 1, 1);
         const penguinMaterial = new THREE.MeshPhongMaterial({
             color: 0x00ff00,
@@ -15,24 +20,36 @@ class Penguin extends THREE.Group {
         this.add(this.penguin);
     }
 
-    handleKeyEvents(event) {
-        //if (event.target.tagName === "INPUT") { return; }
+    update(timeStamp, state) {
+        // Handle key inputs.
+        if (state.keys["ArrowLeft"]) {
+            this.netForce.add(new THREE.Vector3(-1, 0, 0));
+        }
+        if (state.keys["ArrowRight"]) {
+            this.netForce.add(new THREE.Vector3(1, 0, 0));
+        }
 
-        // The vectors to which each key code in this handler maps. (Change these if you like)
-        const keyMap = {
-            ArrowUp: new THREE.Vector3(0,  1,  0),
-            ArrowLeft: new THREE.Vector3(-1,  0,  0),
-            ArrowRight: new THREE.Vector3(1,  0,  0),
-        };
-        
-        if (event.key === 'ArrowLeft') {
-            this.position.add(keyMap.ArrowLeft);
+        // Friction - opposes movement.
+        this.velocity.multiplyScalar(0.97);
+
+        // Semi-Implicit Euler integration.
+        // ref: https://gafferongames.com/post/integration_basics/
+        const acceleration = new THREE.Vector3()
+            .copy(this.netForce).multiplyScalar(1 / this.mass);
+        this.velocity.add(acceleration);
+        this.penguin.position.add(this.velocity);
+        this.netForce.set(0, 0, 0);
+
+        // Collisions.
+        const leftBoundary = -9.5;
+        const rightBoundary = 9.5;
+        if (this.penguin.position.x < leftBoundary) {
+            this.penguin.position.x = leftBoundary;
+            this.velocity.x = 0;
         }
-        else if (event.key === 'ArrowRight') {
-            this.position.add(keyMap.ArrowRight);
-        }
-        else if (event.key === ' ') {
-            this.position.add(keyMap.ArrowUp);
+        if (this.penguin.position.x > rightBoundary) {
+            this.penguin.position.x = rightBoundary;
+            this.velocity.x = 0;
         }
     }
 }
