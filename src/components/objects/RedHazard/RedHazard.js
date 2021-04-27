@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-class Hazard extends THREE.Group {
+class RedHazard extends THREE.Group {
     constructor(parent) {
         // Call parent Group() constructor
         super();
@@ -8,21 +8,18 @@ class Hazard extends THREE.Group {
         // Init state
         this.state = {
             gui: parent.state.gui,
-            move: false,
+            move: true,
         };
         const hazardGeometry = new THREE.BoxGeometry(1, 1, 1);
         const hazardMaterial = new THREE.MeshPhongMaterial({
             color: 0xff0000,
         });
         this.hazard = new THREE.Mesh(hazardGeometry, hazardMaterial);
-        this.hazard.position.set(0, 0, -6);
+        this.hazard.position.set(0, 0, -125);
         this.add(this.hazard);
 
         // Add self to parent's update list
         parent.addToUpdateList(this);
-
-        // Populate GUI
-        this.state.gui.add(this.state, 'move');
     }
 
     // Code copied from flower -- adjust so that box translates in the
@@ -35,13 +32,13 @@ class Hazard extends THREE.Group {
         const collision = hazardBox.intersectsBox(penguinBox);
         if (collision) {
             this.state.move = false;
+            state.gameOver = true;
         }
 
-        if (this.state.move) {
+        if (this.state.move && !state.gameOver) {
             this.hazard.translateZ(0.05);
         }
-
     }
 }
 
-export default Hazard;
+export default RedHazard;

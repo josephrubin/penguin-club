@@ -2,7 +2,7 @@ import * as Dat from 'dat.gui';
 import { Scene, Color, PlaneGeometry, MeshBasicMaterial, Mesh, Vector3 } from 'three';
 import { Flower, Land } from 'objects';
 import { BasicLights } from 'lights';
-import { Penguin, Hazard } from '../objects';
+import { Penguin, RedHazard, BlueHazard } from '../objects';
 
 class GameScene extends Scene {
     constructor() {
@@ -18,14 +18,15 @@ class GameScene extends Scene {
             keys: {
                 ArrowLeft: false,
                 ArrowRight: false
-            }
+            },
+            gameOver: false,
         };
 
         // Set background to a nice color
         this.background = new Color(0x7ec0ee);
 
         // Create the ramp plane
-        const geo = new PlaneGeometry(20, 100);
+        const geo = new PlaneGeometry(20, 250);
         const planeMaterial = new MeshBasicMaterial({color: 0xffffff});
         const plane = new Mesh(geo, planeMaterial);
         plane.position.set(0, -0.5, 0);
@@ -35,8 +36,6 @@ class GameScene extends Scene {
         const lights = new BasicLights();
         this.state.penguin = new Penguin();
         this.add(lights, this.state.penguin, plane);
-        const hazard = new Hazard(this);
-        this.add(hazard);
 
         // Add objects to update list.
         this.addToUpdateList(this.state.penguin);
@@ -67,6 +66,28 @@ class GameScene extends Scene {
     update(timeStamp) {
         const { rotationSpeed, updateList } = this.state;
         this.rotation.y = (rotationSpeed * timeStamp) / 10000;
+
+        // Randomly add hazards to the scene
+        if (!this.state.gameOver && Math.round(Math.random() * 10000) % 100 === 0) {
+            // x is a random position (left to right) on the ramp
+            const x = (Math.random() * 19) - 9.5;
+
+            // Add a red hazard
+            if (Math.round(Math.random()) === 0) {
+                const redHazard = new RedHazard(this);
+                redHazard.position.x = x;
+                this.add(redHazard);
+                this.addToUpdateList(redHazard);
+            }
+
+            // Add a blue hazard
+            else {
+                const blueHazard = new BlueHazard(this);
+                blueHazard.position.x = x;
+                this.add(blueHazard);
+                this.addToUpdateList(blueHazard);
+            }
+        }
 
         // Call update for each object in the updateList
         for (const obj of updateList) {

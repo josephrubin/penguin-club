@@ -1,0 +1,1 @@
+export { default as RedHazard } from './RedHazard.js';
