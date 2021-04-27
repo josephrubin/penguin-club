@@ -2,7 +2,7 @@ import * as Dat from 'dat.gui';
 import { Scene, Color, PlaneGeometry, MeshBasicMaterial, Mesh, Vector3 } from 'three';
 import { Flower, Land } from 'objects';
 import { BasicLights } from 'lights';
-import { Penguin } from '../objects';
+import { Penguin, Hazard } from '../objects';
 
 class GameScene extends Scene {
     constructor() {
@@ -32,6 +32,8 @@ class GameScene extends Scene {
         const lights = new BasicLights();
         this.state.penguin = new Penguin();
         this.add(lights, this.state.penguin, plane);
+        const hazard = new Hazard(this);
+        this.add(hazard);
 
         // Populate GUI
         //this.state.gui.add(this.state.penguin, 'rotationSpeed', -5, 5);
@@ -52,7 +54,7 @@ class GameScene extends Scene {
 
         // Call update for each object in the updateList
         for (const obj of updateList) {
-            obj.update(timeStamp);
+            obj.update(timeStamp, this.state.penguin);
         }
     }
 }

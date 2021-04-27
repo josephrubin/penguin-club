@@ -11,6 +11,7 @@ class Penguin extends THREE.Group {
             color: 0x00ff00,
         });
         this.penguin = new THREE.Mesh(penguinGeometry, penguinMaterial);
+        this.position.set(0, 0, 0);
         this.add(this.penguin);
     }
 
@@ -23,12 +24,16 @@ class Penguin extends THREE.Group {
             ArrowLeft: new THREE.Vector3(-1,  0,  0),
             ArrowRight: new THREE.Vector3(1,  0,  0),
         };
-
-        if (!(event.code in keyMap)) {
-            return;
+        
+        if (event.key === 'ArrowLeft') {
+            this.position.add(keyMap.ArrowLeft);
         }
-
-        const offset = new THREE.Vector3().copy(keyMap[event.code]);
+        else if (event.key === 'ArrowRight') {
+            this.position.add(keyMap.ArrowRight);
+        }
+        else if (event.key === ' ') {
+            this.position.add(keyMap.ArrowUp);
+        }
     }
 }
 
