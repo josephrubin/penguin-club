@@ -1,5 +1,5 @@
 import * as Dat from 'dat.gui';
-import { Scene, Color, PlaneGeometry, MeshBasicMaterial, Mesh, Vector3 } from 'three';
+import { Scene, Color, PlaneGeometry, MeshStandardMaterial, Mesh, Vector2, Vector3, Texture, TextureLoader, RepeatWrapping } from 'three';
 import { Flower, Land } from 'objects';
 import { BasicLights } from 'lights';
 import { Penguin, Log, BlueHazard } from '../objects';
@@ -27,7 +27,26 @@ class GameScene extends Scene {
 
         // Create the ramp plane
         const geo = new PlaneGeometry(20, 250);
-        const planeMaterial = new MeshBasicMaterial({color: 0xffffff});
+        //const planeMaterial = new MeshBasicMaterial({color: 0xffffff});
+
+        this.planeTexture = new TextureLoader().load(
+            'textures/snow/Snow_001_COLOR.jpg'
+        );
+        this.planeTexture.repeat.set(6, 60)
+        this.planeTexture.wrapS = RepeatWrapping;
+        this.planeTexture.wrapT = RepeatWrapping;
+
+        this.planeNormal = new TextureLoader().load(
+            'textures/snow/Snow_001_NORM.jpg'
+        )
+        this.planeNormal.repeat.set(6, 60)
+        this.planeNormal.wrapS = RepeatWrapping;
+        this.planeNormal.wrapT = RepeatWrapping;
+
+        const planeMaterial = new MeshStandardMaterial({
+            map: this.planeTexture,
+            normalMap: this.planeNormal       
+        });
         const plane = new Mesh(geo, planeMaterial);
         plane.position.set(0, -0.5, 0);
         plane.lookAt(new Vector3(0, 1, 0));
@@ -88,6 +107,9 @@ class GameScene extends Scene {
                 this.addToUpdateList(blueHazard);
             }
         }
+
+        this.planeTexture.offset.add(new Vector2(0, 0.1));
+        this.planeNormal.offset.add(new Vector2(0, 0.1));
 
         // Call update for each object in the updateList
         for (const obj of updateList) {
