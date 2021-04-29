@@ -108,8 +108,8 @@ class GameScene extends Scene {
             }
         }
 
-        this.planeTexture.offset.add(new Vector2(0, 0.1));
-        this.planeNormal.offset.add(new Vector2(0, 0.1));
+        //this.planeTexture.offset.add(new Vector2(0, 0.1));
+        //this.planeNormal.offset.add(new Vector2(0, 0.1));
 
         // Call update for each object in the updateList
         for (const obj of updateList) {

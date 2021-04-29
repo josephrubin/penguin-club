@@ -16,8 +16,25 @@ class Penguin extends THREE.Group {
             color: 0x00ff00,
         });
         this.penguin = new THREE.Mesh(penguinGeometry, penguinMaterial);
+
+        // Load object
+        const loader = new GLTFLoader();
+
+        this.name = 'penguin';
+        loader.load('model/penguin/model.gltf', (gltf) => {
+            // Turn the model away from the camera.
+            gltf.scene.rotateY(Math.PI)
+
+            // Put the model on the floor.
+            gltf.scene.position.y -= 0.25;
+
+            this.penguin = gltf.scene
+
+            this.add(gltf.scene);
+        });
+
         this.position.set(0, 0, 0);
-        this.add(this.penguin);
+        //this.add(this.penguin);
 
         this.onFloor = true;
     }
