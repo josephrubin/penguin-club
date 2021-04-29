@@ -36,7 +36,7 @@ class BlueHazard extends THREE.Group {
         }
 
         if (this.state.move && !state.gameOver) {
-            this.hazard.translateZ(0.05);
+            this.hazard.translateZ(0.11);
         }
 
     }

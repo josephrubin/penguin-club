@@ -2,7 +2,7 @@ import * as Dat from 'dat.gui';
 import { Scene, Color, PlaneGeometry, MeshBasicMaterial, Mesh, Vector3 } from 'three';
 import { Flower, Land } from 'objects';
 import { BasicLights } from 'lights';
-import { Penguin, RedHazard, BlueHazard } from '../objects';
+import { Penguin, Log, BlueHazard } from '../objects';
 
 class GameScene extends Scene {
     constructor() {
@@ -68,16 +68,16 @@ class GameScene extends Scene {
         this.rotation.y = (rotationSpeed * timeStamp) / 10000;
 
         // Randomly add hazards to the scene
-        if (!this.state.gameOver && Math.round(Math.random() * 10000) % 100 === 0) {
+        if (!this.state.gameOver && Math.round(Math.random() * 10000) % 150 === 0) {
             // x is a random position (left to right) on the ramp
             const x = (Math.random() * 19) - 9.5;
 
             // Add a red hazard
             if (Math.round(Math.random()) === 0) {
-                const redHazard = new RedHazard(this);
-                redHazard.position.x = x;
-                this.add(redHazard);
-                this.addToUpdateList(redHazard);
+                const log = new Log(this);
+                log.position.x = x;
+                this.add(log);
+                this.addToUpdateList(log);
             }
 
             // Add a blue hazard
