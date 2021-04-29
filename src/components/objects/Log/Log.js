@@ -16,16 +16,17 @@ class Log extends THREE.Group {
             color: 0xff0000,
         });
         this.log = new THREE.Mesh(logGeometry, logMaterial);
-        // Load object
-        // const loader = new GLTFLoader();
 
-        // this.name = 'PUSHILIN_log';
-        // loader.load('./PUSHILIN_log.gltf', (gltf) => {
-        //     this.add(gltf.scene);
-        // });
+        // Load object
+        const loader = new GLTFLoader();
+
+        this.name = 'log';
+        loader.load('model/log2/PUSHILIN_log.gltf', (gltf) => {
+            this.add(gltf.scene);
+        });
 
         this.log.position.set(0, 0, -125);
-        this.add(this.log);
+        //this.add(this.log);
 
         // Add self to parent's update list
         parent.addToUpdateList(this);
@@ -44,9 +45,9 @@ class Log extends THREE.Group {
         //     state.gameOver = true;
         // }
 
-        // if (this.state.move && !state.gameOver) {
-        //     this.log.translateZ(0.11);
-        // }
+        if (this.state.move && !state.gameOver) {
+            this.log.translateZ(0.11);
+        }
     }
 }
 
