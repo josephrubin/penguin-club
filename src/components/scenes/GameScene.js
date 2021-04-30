@@ -1,7 +1,8 @@
 import * as Dat from 'dat.gui';
 import { Scene, Color, PlaneGeometry, MeshStandardMaterial, Mesh, Vector2, Vector3, Texture, TextureLoader, RepeatWrapping } from 'three';
 import { BasicLights } from 'lights';
-import { Penguin, Log, Rock, Ice } from '../objects';
+import { Penguin, Log, Rock, Ice} from '../objects';
+import { Terrain } from '../objects/Terrain';
 
 class GameScene extends Scene {
     constructor() {
@@ -54,6 +55,10 @@ class GameScene extends Scene {
         const lights = new BasicLights();
         this.state.penguin = new Penguin();
         this.add(lights, this.state.penguin, plane);
+
+        // Add the terrain.
+        const terrain = new Terrain();
+        this.add(terrain);
 
         // Add objects to update list.
         this.addToUpdateList(this.state.penguin);
@@ -117,8 +122,8 @@ class GameScene extends Scene {
 
         }
 
-        //this.planeTexture.offset.add(new Vector2(0, 0.1));
-        //this.planeNormal.offset.add(new Vector2(0, 0.1));
+        this.planeTexture.offset.add(new Vector2(0, 0.1));
+        this.planeNormal.offset.add(new Vector2(0, 0.1));
 
         // Call update for each object in the updateList
         for (const obj of updateList) {

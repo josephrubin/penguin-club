@@ -16,9 +16,9 @@ class Log extends THREE.Group {
         const loader = new GLTFLoader();
 
         this.name = 'log';
-        loader.load('model/log2/PUSHILIN_log.gltf', (gltf) => {
+        /*loader.load('model/log2/PUSHILIN_log.gltf', (gltf) => {
             this.add(gltf.scene);
-        });
+        });*/
 
         this.position.set(0, 0, -125);
 
