@@ -11,11 +11,6 @@ class Log extends THREE.Group {
             gui: parent.state.gui,
             move: true,
         };
-        const logGeometry = new THREE.BoxGeometry(1, 1, 1);
-        const logMaterial = new THREE.MeshPhongMaterial({
-            color: 0xff0000,
-        });
-        this.log = new THREE.Mesh(logGeometry, logMaterial);
 
         // Load object
         const loader = new GLTFLoader();
@@ -25,8 +20,7 @@ class Log extends THREE.Group {
             this.add(gltf.scene);
         });
 
-        this.log.position.set(0, 0, -125);
-        //this.add(this.log);
+        this.position.set(0, 0, -125);
 
         // Add self to parent's update list
         parent.addToUpdateList(this);
@@ -37,16 +31,16 @@ class Log extends THREE.Group {
     update(timeStamp, state) {
         // Stack overflow for collision detection:
         // https://stackoverflow.com/questions/28453895/how-to-detect-collision-between-two-objects-in-javascript-with-three-js
-        // const logBox = new THREE.Box3().setFromObject(this.log);
+        const logBox = new THREE.Box3().setFromObject(this);
         const penguinBox = new THREE.Box3().setFromObject(state.penguin);
-        // const collision = logBox.intersectsBox(penguinBox);
-        // if (collision) {
-        //     this.state.move = false;
-        //     state.gameOver = true;
-        // }
+        const collision = logBox.intersectsBox(penguinBox);
+        if (collision) {
+            this.state.move = false;
+            state.gameOver = true;
+        }
 
         if (this.state.move && !state.gameOver) {
-            this.log.translateZ(0.11);
+            this.translateZ(0.11);
         }
     }
 }

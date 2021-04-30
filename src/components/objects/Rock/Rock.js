@@ -1,6 +1,7 @@
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-class BlueHazard extends THREE.Group {
+class Rock extends THREE.Group {
     constructor(parent) {
         // Call parent Group() constructor
         super();
@@ -10,13 +11,16 @@ class BlueHazard extends THREE.Group {
             gui: parent.state.gui,
             move: true,
         };
-        const hazardGeometry = new THREE.BoxGeometry(1, 1, 1);
-        const hazardMaterial = new THREE.MeshPhongMaterial({
-            color: 0x0000ff,
+        // Load object
+        const loader = new GLTFLoader();
+
+        this.name = 'rock';
+        loader.load('model/rock2/rock_02.gltf', (gltf) => {
+            gltf.scene.scale.set(0.01,0.01,0.01)
+            this.add(gltf.scene);
         });
-        this.hazard = new THREE.Mesh(hazardGeometry, hazardMaterial);
-        this.hazard.position.set(0, 0, -125);
-        this.add(this.hazard);
+
+        this.position.set(0, -1, -125);
 
         // Add self to parent's update list
         parent.addToUpdateList(this);
@@ -27,7 +31,7 @@ class BlueHazard extends THREE.Group {
     update(timeStamp, state) {
         // Stack overflow for collision detection:
         // https://stackoverflow.com/questions/28453895/how-to-detect-collision-between-two-objects-in-javascript-with-three-js
-        const hazardBox = new THREE.Box3().setFromObject(this.hazard);
+        const hazardBox = new THREE.Box3().setFromObject(this);
         const penguinBox = new THREE.Box3().setFromObject(state.penguin);
         const collision = hazardBox.intersectsBox(penguinBox);
         if (collision) {
@@ -36,10 +40,10 @@ class BlueHazard extends THREE.Group {
         }
 
         if (this.state.move && !state.gameOver) {
-            this.hazard.translateZ(0.11);
+            this.translateZ(0.11);
         }
 
     }
 }
 
-export default BlueHazard;
+export default Rock;

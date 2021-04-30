@@ -2,5 +2,5 @@ export * from './Flower';
 export * from './Land';
 export * from './Penguin';
 export * from './Log';
-export * from './BlueHazard';
+export * from './Rock';
 
