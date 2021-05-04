@@ -1,7 +1,7 @@
 import * as Dat from 'dat.gui';
 import { Scene, Color, PlaneGeometry, MeshStandardMaterial, Mesh, Vector2, Vector3, Texture, TextureLoader, RepeatWrapping } from 'three';
 import { BasicLights } from 'lights';
-import { Penguin, Log, Rock } from '../objects';
+import { Penguin, Log, Rock, Ice } from '../objects';
 
 class GameScene extends Scene {
     constructor() {
@@ -89,9 +89,10 @@ class GameScene extends Scene {
         if (!this.state.gameOver && Math.round(Math.random() * 10000) % 150 === 0) {
             // x is a random position (left to right) on the ramp
             const x = (Math.random() * 19) - 9.5;
+            const select = Math.round(Math.random() * 2);
 
             // Add a log
-            if (Math.round(Math.random()) === 0) {
+            if (select === 0) {
                 const log = new Log(this);
                 log.position.x = x;
                 this.add(log);
@@ -99,12 +100,21 @@ class GameScene extends Scene {
             }
 
             // Add a rock
-            else {
+            else if (select === 1) {
                 const rock = new Rock(this);
                 rock.position.x = x;
                 this.add(rock);
                 this.addToUpdateList(rock);
             }
+
+            // Add ice
+            // else {
+            //     const ice = new Ice(this);
+            //     // ice.position.x = x;
+            //     this.add(ice);
+            //     this.addToUpdateList(ice);
+            // }
+
         }
 
         //this.planeTexture.offset.add(new Vector2(0, 0.1));
