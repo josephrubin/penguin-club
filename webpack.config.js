@@ -16,6 +16,10 @@ module.exports = {
         warnings: false
     },
     module: {
+        loaders: [
+            { test: /\.js$/, exclude: /node_modules/, loaders: 'babel', query: { presets: ['react', 'es2015', 'stage-1'] } },
+            { test: /\.css$/, loader: "style-loader!css-loader" }
+        ]
         rules: [
             {
                 test: /\.js$/,
@@ -45,6 +49,7 @@ module.exports = {
         ],
     },
     resolve: {
+        extensions: ['', '.js', '.jsx', '.css']
         alias: {
             lights$: path.resolve(__dirname, 'src/components/lights'),
             objects$: path.resolve(__dirname, 'src/components/objects'),
@@ -52,6 +57,6 @@ module.exports = {
         },
     },
     plugins: [
-        new HtmlWebpackPlugin({ title: pkg.title, favicon: 'src/favicon.ico' }),
+        new HtmlWebpackPlugin({ title: pkg.title, favicon: 'src/favicon.ico', template: 'src/index.html'}),
     ],
 };
