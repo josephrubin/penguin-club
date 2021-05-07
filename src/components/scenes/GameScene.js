@@ -107,17 +107,6 @@ class GameScene extends Scene {
         this.rotation.y = (rotationSpeed * timeStamp) / 10000;
 
         // Randomly add hazards to the scene
-        if (!this.state.gameOver && Math.round(Math.random() * 10000) % 150 === 0) {
-            // x is a random position (left to right) on the ramp
-            const x = (Math.random() * 19) - 9.5;
-            const select = Math.round(Math.random() * 3);
-
-            // Add a log
-            if (select === 0) {
-                const log = new Log(this);
-                log.position.x = x;
-                this.add(log);
-                this.addToUpdateList(log);
         if (timeStamp < 10000000) {
             // const snow = new Snow(this);
             // this.add(snow);
@@ -132,41 +121,36 @@ class GameScene extends Scene {
             }
             if (!this.state.gameOver && Math.round(Math.random() * 10000) % 150 === 0) {
                 const select = Math.random();
-                if (select <= 0.25) {
+                if (select <= 0.2) {
                     const ice = new Ice(this);
+                    this.addToUpdateList(ice);
                     this.add(ice);
                 }
-                else {
+
+                // 3x
+                else if (select <= 0.8) {
                     const hazard = new Hazard(this);
+                    this.addToUpdateList(hazard);
                     this.add(hazard);
                 }
-            }
-            
-            // Add a moving hazard
-            else if (select === 2) {
-                const direction = Math.floor(Math.random() * 2);
-                const LEFT = 0;
 
-                const movingHazard = new MovingHazard(this, direction);
+                // Add a moving hazard
+                else {
+                    const direction = Math.floor(Math.random() * 2);
+                    const LEFT = 0;
 
-                // Always start the moving hazards on the left or right.
-                if (direction == LEFT) {
-                    movingHazard.position.x = -9.5;
-                } else {
-                    movingHazard.position.x = 9.5;
+                    const movingHazard = new MovingHazard(this, direction);
+
+                    // Always start the moving hazards on the left or right.
+                    if (direction == LEFT) {
+                        movingHazard.position.x = -9.5;
+                    } else {
+                        movingHazard.position.x = 9.5;
+                    }
+                    this.add(movingHazard);
+                    this.addToUpdateList(movingHazard);
                 }
-                this.add(movingHazard);
-                this.addToUpdateList(movingHazard);
             }
-
-            // Add ice
-            // else {
-            //     const ice = new Ice(this);
-            //     // ice.position.x = x;
-            //     this.add(ice);
-            //     this.addToUpdateList(ice);
-            // }
-
         }
 
         // Move the snow texture.
