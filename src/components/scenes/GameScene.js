@@ -119,43 +119,44 @@ class GameScene extends Scene {
                     this.state.speed = this.state.defaultSpeed;
                 }
             }
-            if (!this.state.gameOver && Math.round(Math.random() * 10000) % 150 === 0) {
-                const select = Math.random();
-                if (select <= 0.2) {
-                    const ice = new Ice(this);
-                    this.addToUpdateList(ice);
-                    this.add(ice);
-                }
+            if (!this.state.gameOver) {
+                // Move the snow texture.
+                this.planeTexture.offset.add(new Vector2(0, 0.1));
+                this.planeNormal.offset.add(new Vector2(0, 0.1));
 
-                // 3x
-                else if (select <= 0.8) {
-                    const hazard = new Hazard(this);
-                    this.addToUpdateList(hazard);
-                    this.add(hazard);
-                }
-
-                // Add a moving hazard
-                else {
-                    const direction = Math.floor(Math.random() * 2);
-                    const LEFT = 0;
-
-                    const movingHazard = new MovingHazard(this, direction);
-
-                    // Always start the moving hazards on the left or right.
-                    if (direction == LEFT) {
-                        movingHazard.position.x = -9.5;
-                    } else {
-                        movingHazard.position.x = 9.5;
+                if (Math.round(Math.random() * 10000) % 150 === 0) {
+                    const select = Math.random();
+                    if (select <= 0.2) {
+                        const ice = new Ice(this);
+                        this.addToUpdateList(ice);
+                        this.add(ice);
                     }
-                    this.add(movingHazard);
-                    this.addToUpdateList(movingHazard);
+
+                    else if (select <= 0.8) {
+                        const hazard = new Hazard(this);
+                        this.addToUpdateList(hazard);
+                        this.add(hazard);
+                    }
+
+                    // Add a moving hazard
+                    else {
+                        const direction = Math.floor(Math.random() * 2);
+                        const LEFT = 0;
+
+                        const movingHazard = new MovingHazard(this, direction);
+
+                        // Always start the moving hazards on the left or right.
+                        if (direction == LEFT) {
+                            movingHazard.position.x = -9.5;
+                        } else {
+                            movingHazard.position.x = 9.5;
+                        }
+                        this.add(movingHazard);
+                        this.addToUpdateList(movingHazard);
+                    }
                 }
             }
         }
-
-        // Move the snow texture.
-        this.planeTexture.offset.add(new Vector2(0, 0.1));
-        this.planeNormal.offset.add(new Vector2(0, 0.1));
 
         // Move the terrain.
         /*
