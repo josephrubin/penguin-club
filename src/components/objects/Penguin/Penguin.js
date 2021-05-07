@@ -25,17 +25,13 @@ class Penguin extends THREE.Group {
             // Turn the model away from the camera.
             gltf.scene.rotateY(Math.PI)
 
-            // Put the model on the floor.
-            gltf.scene.position.y -= 0.25;
-
-            this.penguin = gltf.scene
-
             this.add(gltf.scene);
         });
 
         this.position.set(0, 0, 0);
-        //this.add(this.penguin);
 
+        // Put the model on the floor.
+        this.translateY(-0.34)
         this.onFloor = true;
     }
 
@@ -65,7 +61,7 @@ class Penguin extends THREE.Group {
         const acceleration = new THREE.Vector3()
             .copy(this.netForce).multiplyScalar(1 / this.mass);
         this.velocity.add(acceleration);
-        this.penguin.position.add(this.velocity);
+        this.position.add(this.velocity);
         this.netForce.set(0, 0, 0);
 
         // Collisions.
@@ -84,8 +80,8 @@ class Penguin extends THREE.Group {
         }
         // Floor.
         this.onFloor = false;
-        if (this.penguin.position.y <= bottomBoundary) {
-            this.penguin.position.y = bottomBoundary;
+        if (this.position.y <= bottomBoundary) {
+            this.position.y = bottomBoundary;
             this.velocity.y = 0;
             this.onFloor = true;
         }

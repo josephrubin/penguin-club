@@ -9,10 +9,10 @@ class Terrain extends Group {
         this.seed = Math.random();
 
         // The land is a Plane Geometry.
-        const widthSegments = 50;
-        const heightSegments = 50;
+        const widthSegments = 70;
+        const heightSegments = 70;
         this.geometry = new PlaneGeometry(350, 350, widthSegments, heightSegments);
-        this.material = new MeshBasicMaterial({
+        this.material = new MeshPhongMaterial({
             side: BackSide,
             vertexColors: FaceColors
         });
