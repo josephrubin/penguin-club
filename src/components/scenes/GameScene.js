@@ -3,6 +3,7 @@ import { Scene, Color, PlaneGeometry, MeshStandardMaterial, Mesh, Vector2, Vecto
 import { BasicLights } from 'lights';
 import { Penguin, Log, Rock, Ice} from '../objects';
 import { Terrain } from '../objects/Terrain';
+import MovingHazard from '../objects/MovingHazard/MovingHazard';
 
 class GameScene extends Scene {
     constructor() {
@@ -26,7 +27,7 @@ class GameScene extends Scene {
         this.background = new Color(0x7ec0ee);
 
         // Create the ramp plane
-        const geo = new PlaneGeometry(20, 250);
+        const geo = new PlaneGeometry(20, 550);
         //const planeMaterial = new MeshBasicMaterial({color: 0xffffff});
 
         this.planeTexture = new TextureLoader().load(
@@ -99,7 +100,7 @@ class GameScene extends Scene {
         if (!this.state.gameOver && Math.round(Math.random() * 10000) % 150 === 0) {
             // x is a random position (left to right) on the ramp
             const x = (Math.random() * 19) - 9.5;
-            const select = Math.round(Math.random() * 2);
+            const select = Math.round(Math.random() * 3);
 
             // Add a log
             if (select === 0) {
@@ -115,6 +116,23 @@ class GameScene extends Scene {
                 rock.position.x = x;
                 this.add(rock);
                 this.addToUpdateList(rock);
+            }
+            
+            // Add a moving hazard
+            else if (select === 2) {
+                const direction = Math.floor(Math.random() * 2);
+                const LEFT = 0;
+
+                const movingHazard = new MovingHazard(this, direction);
+
+                // Always start the moving hazards on the left or right.
+                if (direction == LEFT) {
+                    movingHazard.position.x = -9.5;
+                } else {
+                    movingHazard.position.x = 9.5;
+                }
+                this.add(movingHazard);
+                this.addToUpdateList(movingHazard);
             }
 
             // Add ice
