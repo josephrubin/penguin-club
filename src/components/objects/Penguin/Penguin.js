@@ -30,8 +30,6 @@ class Penguin extends THREE.Group {
 
         this.position.set(0, 0, 0);
 
-        // Put the model on the floor.
-        this.translateY(-0.34)
         this.onFloor = true;
     }
 
@@ -67,15 +65,15 @@ class Penguin extends THREE.Group {
         // Collisions.
         const leftBoundary = -9.5;
         const rightBoundary = 9.5;
-        const bottomBoundary = 0;
+        const bottomBoundary = -0.34;
         // Left wall.
-        if (this.penguin.position.x < leftBoundary) {
-            this.penguin.position.x = leftBoundary;
+        if (this.position.x < leftBoundary) {
+            this.position.x = leftBoundary;
             this.velocity.x = 0;
         }
         // Right wall.
-        if (this.penguin.position.x > rightBoundary) {
-            this.penguin.position.x = rightBoundary;
+        if (this.position.x > rightBoundary) {
+            this.position.x = rightBoundary;
             this.velocity.x = 0;
         }
         // Floor.
