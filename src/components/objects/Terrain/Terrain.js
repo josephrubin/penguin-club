@@ -11,7 +11,9 @@ class Terrain extends Group {
         // The land is a Plane Geometry.
         const widthSegments = 70;
         const heightSegments = 70;
-        this.geometry = new PlaneGeometry(350, 350, widthSegments, heightSegments);
+        this.width = 350;
+        this.length = 350;
+        this.geometry = new PlaneGeometry(this.width, this.length, widthSegments, heightSegments);
         this.material = new MeshPhongMaterial({
             side: BackSide,
             vertexColors: FaceColors
@@ -29,15 +31,6 @@ class Terrain extends Group {
                 const perlinX = x / 5;
                 const perlinY = y / 5;
  
-                /*if (x > 5) {
-                console.log("Perlin on coords ", perlinX, perlinY);
-                const q = this.perlin(perlinX, perlinY);
-                console.log(q)
-                }*/
-
-                //console.log("coords", x, y, perlinX, perlinY, this.perlin(perlinX, perlinY));
-
-                //vertex.y = -4 + 2 * Math.random() // + 5 * this.perlin(perlinX, perlinY);
                 vertex.y = -5.8 + 5 * this.perlin(perlinX, perlinY);
             }
         }

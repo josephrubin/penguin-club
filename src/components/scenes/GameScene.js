@@ -57,8 +57,13 @@ class GameScene extends Scene {
         this.add(lights, this.state.penguin, plane);
 
         // Add the terrain.
-        const terrain = new Terrain();
-        this.add(terrain);
+        this.terrainOne = new Terrain();
+        // Another terrain is always in front, and we keep generating more as the terrain
+        // move off screen behind us.
+        this.terrainTwo = new Terrain();
+        this.terrainTwo.position.z -= this.terrainOne.width;
+        
+        this.add(this.terrainOne, this.terrainTwo);
 
         // Add objects to update list.
         this.addToUpdateList(this.state.penguin);
@@ -122,8 +127,19 @@ class GameScene extends Scene {
 
         }
 
+        // Move the snow texture.
         this.planeTexture.offset.add(new Vector2(0, 0.1));
         this.planeNormal.offset.add(new Vector2(0, 0.1));
+
+        // Move the terrain.
+        this.terrainOne.position.z += 1;
+        this.terrainTwo.position.z += 1;
+        if (this.terrainOne.position.z >= this.terrainOne.width) {
+            console.log('new trr')
+            this.terrainOne = this.terrainTwo;
+            this.terrainTwo = new Terrain();
+            this.terrainTwo.position.z -= this.terrainOne.width;
+        }
 
         // Call update for each object in the updateList
         for (const obj of updateList) {
