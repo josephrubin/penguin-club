@@ -16,8 +16,8 @@ import { GameScene } from 'scenes';
     // renderer.xr.enabled = true;
 
     // Set up camera
-    camera.position.set(0, 1, 10);
-    camera.lookAt(new Vector3(0, 3, 0));
+    camera.position.set(0, 5, 11);
+    camera.lookAt(new Vector3(0, 0, 0));
     console.log("set scene called");
 
 // Set up renderer, canvas, and minor CSS adjustments
