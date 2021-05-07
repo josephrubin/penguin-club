@@ -11,6 +11,8 @@ class Penguin extends THREE.Group {
         this.velocity = new THREE.Vector3(0, 0, 0);
         this.mass = 100;
 
+        this.seenIce = false;
+
         const penguinGeometry = new THREE.BoxGeometry(1, 1, 1);
         const penguinMaterial = new THREE.MeshPhongMaterial({
             color: 0x00ff00,
@@ -39,12 +41,12 @@ class Penguin extends THREE.Group {
         }
     }
 
-    update(timeStamp, state) {
+    update(timeStamp, scene) {
         // Handle key inputs.
-        if (state.keys["ArrowLeft"]) {
+        if (scene.state.keys["ArrowLeft"]) {
             this.netForce.add(new THREE.Vector3(-1, 0, 0));
         }
-        if (state.keys["ArrowRight"]) {
+        if (scene.state.keys["ArrowRight"]) {
             this.netForce.add(new THREE.Vector3(1, 0, 0));
         }
 
