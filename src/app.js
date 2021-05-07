@@ -9,40 +9,90 @@
 import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GameScene } from 'scenes';
+//----
+ const scene = new GameScene();
+    const camera = new PerspectiveCamera();
+    const renderer = new WebGLRenderer({ antialias: true });
+    // renderer.xr.enabled = true;
 
-// Initialize core ThreeJS components
-const scene = new GameScene();
-const camera = new PerspectiveCamera();
-const renderer = new WebGLRenderer({ antialias: true });
-
-// Set up camera
-// camera.position.set(6, 3, -10);
-// camera.lookAt(new Vector3(0, 0, 0));
-camera.position.set(0, 1, 10);
-camera.lookAt(new Vector3(0, 3, 0));
+    // Set up camera
+    camera.position.set(0, 1, 10);
+    camera.lookAt(new Vector3(0, 3, 0));
+    console.log("set scene called");
 
 // Set up renderer, canvas, and minor CSS adjustments
-renderer.setPixelRatio(window.devicePixelRatio);
-const canvas = renderer.domElement;
-canvas.style.display = 'block'; // Removes padding below canvas
-document.body.style.margin = 0; // Removes margin around page
-document.body.style.overflow = 'hidden'; // Fix scrolling
-document.body.appendChild(canvas);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    const canvas = renderer.domElement;
+    canvas.style.display = 'block'; // Removes padding below canvas
+    document.body.style.margin = 0; // Removes margin around page
+    document.body.style.overflow = 'hidden'; // Fix scrolling
+    // document.body.appendChild(canvas);
 
-// Set up controls
-const controls = new OrbitControls(camera, canvas);
-controls.enableDamping = true;
-controls.enablePan = false;
-controls.minDistance = 4;
-controls.maxDistance = 16;
-controls.update();
+    // Set up controls
+    const controls = new OrbitControls(camera, canvas);
+    controls.enableDamping = true;
+    controls.enablePan = false;
+    controls.minDistance = 4;
+    controls.maxDistance = 16;
+    controls.update();
+
+// function setScene(){
+// }
+let clicked = false;
+
+window.onload=function(){
+    var btn = document.getElementById('begin-btn'); 
+    btn.onclick =  function() {
+        clicked = true,  
+        // canvas.style.display = 'block',
+        // document.body.style.margin = 0, 
+        // document.body.style.overflow = 'hidden',
+        document.body.appendChild(canvas)
+        // controls.enableDamping = true,
+        // controls.enablePan = false,
+        // controls.minDistance = 4,
+        // controls.maxDistance = 16,
+        // controls.update()
+    };
+    // debugger;
+}
+//----
+
+// // Initialize core ThreeJS components
+// const scene = new GameScene();
+// const camera = new PerspectiveCamera();
+// const renderer = new WebGLRenderer({ antialias: true });
+
+// // Set up camera
+// // camera.position.set(6, 3, -10);
+// // camera.lookAt(new Vector3(0, 0, 0));
+// camera.position.set(0, 1, 10);
+// camera.lookAt(new Vector3(0, 3, 0));
+
+// // Set up renderer, canvas, and minor CSS adjustments
+// renderer.setPixelRatio(window.devicePixelRatio);
+// const canvas = renderer.domElement;
+// canvas.style.display = 'block'; // Removes padding below canvas
+// document.body.style.margin = 0; // Removes margin around page
+// document.body.style.overflow = 'hidden'; // Fix scrolling
+// document.body.appendChild(canvas);
+
+// // Set up controls
+// const controls = new OrbitControls(camera, canvas);
+// controls.enableDamping = true;
+// controls.enablePan = false;
+// controls.minDistance = 4;
+// controls.maxDistance = 16;
+// controls.update();
 
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
-    controls.update();
-    renderer.render(scene, camera);
-    scene.update && scene.update(timeStamp);
-    window.requestAnimationFrame(onAnimationFrameHandler);
+    if (clicked == true){
+        controls.update();
+        renderer.render(scene, camera);
+        scene.update && scene.update(timeStamp);
+        window.requestAnimationFrame(onAnimationFrameHandler);
+    }
 };
 window.requestAnimationFrame(onAnimationFrameHandler);
 
