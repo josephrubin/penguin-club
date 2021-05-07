@@ -132,6 +132,7 @@ class GameScene extends Scene {
         this.planeNormal.offset.add(new Vector2(0, 0.1));
 
         // Move the terrain.
+        /*
         this.terrainOne.position.z += 1;
         this.terrainTwo.position.z += 1;
         if (this.terrainOne.position.z >= this.terrainOne.width) {
@@ -139,7 +140,7 @@ class GameScene extends Scene {
             this.terrainOne = this.terrainTwo;
             this.terrainTwo = new Terrain();
             this.terrainTwo.position.z -= this.terrainOne.width;
-        }
+        }*/
 
         // Call update for each object in the updateList
         for (const obj of updateList) {
