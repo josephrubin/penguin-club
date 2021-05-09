@@ -136,7 +136,7 @@ class Ice extends THREE.Group {
         const penguinBox = new THREE.Box3().setFromObject(scene.state.penguin);
         const collision = hazardBox.intersectsBox(penguinBox);
         if (collision) {
-            scene.state.speed += 0.1;
+            scene.state.speed += 0.05;
             scene.state.penguin.seenIce = true;
         }
 

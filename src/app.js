@@ -19,7 +19,7 @@ const renderer = new WebGLRenderer({ antialias: true });
 // Set up camera
 // camera.position.set(6, 3, -10);
 // camera.lookAt(new Vector3(0, 0, 0));
-camera.position.set(0, 5, 11);
+camera.position.set(0, 10, 25);
 camera.lookAt(new Vector3(0, 0, 0));
 
 // Set up renderer, canvas, and minor CSS adjustments
@@ -29,6 +29,13 @@ canvas.style.display = 'block'; // Removes padding below canvas
 document.body.style.margin = 0; // Removes margin around page
 document.body.style.overflow = 'hidden'; // Fix scrolling
 document.body.appendChild(canvas);
+
+// Set up score
+let score = 0;
+let scoreDiv = document.createElement('div');
+scoreDiv.id = 'score';
+scoreDiv.innerHTML = 'Score: ' + score;
+document.body.appendChild(scoreDiv);
 
 // Set up controls
 const controls = new OrbitControls(camera, canvas);
@@ -43,6 +50,7 @@ const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
     renderer.render(scene, camera);
     scene.update && scene.update(timeStamp);
+    document.getElementById('score').innerHTML = 'Score: ' + score;
     window.requestAnimationFrame(onAnimationFrameHandler);
 };
 window.requestAnimationFrame(onAnimationFrameHandler);
@@ -69,17 +77,17 @@ window.addEventListener("keyup", function(e) {
 // scene.add(slip);
 
 // create an AudioListener and add it to the camera
-const listener = new THREE.AudioListener();
-camera.add( listener );
+// const listener = new THREE.AudioListener();
+// camera.add( listener );
 
-// create a global audio source
-const sound = new THREE.Audio( listener );
+// // create a global audio source
+// const sound = new THREE.Audio( listener );
 
-// load a sound and set it as the Audio object's buffer
-const audioLoader = new THREE.AudioLoader();
-audioLoader.load( 'src/components/sounds/sled_racing.m4a', function( buffer ) {
-	sound.setBuffer( buffer );
-	sound.setLoop( true );
-	sound.setVolume( 0.5 );
-	sound.play();
-});
+// // load a sound and set it as the Audio object's buffer
+// const audioLoader = new THREE.AudioLoader();
+// audioLoader.load( 'src/components/sounds/sled_racing.m4a', function( buffer ) {
+// 	sound.setBuffer( buffer );
+// 	sound.setLoop( true );
+// 	sound.setVolume( 0.5 );
+// 	sound.play();
+// });

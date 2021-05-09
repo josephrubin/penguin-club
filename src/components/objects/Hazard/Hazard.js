@@ -47,16 +47,14 @@ class Hazard extends THREE.Group {
         // Randomly select one of three hazards, each with
         // 1/3 chance of being generated
         const random = Math.random();
-        if (random <= 0.33) this.generateRock(loader);
-        else if (random <= 0.67) this.generateLog(loader);
+        if (random <= 0.33) this.generateTree(loader);
+        else if (random <= 0.67) this.generateTree(loader);
         else this.generateTree(loader);
 
         // Add self to parent's update list
         parent.addToUpdateList(this);
     }
 
-    // Code copied from flower -- adjust so that box translates in the
-    // positive z direction
     update(timeStamp, scene) {
         // Stack overflow for collision detection:
         // https://stackoverflow.com/questions/28453895/how-to-detect-collision-between-two-objects-in-javascript-with-three-js
@@ -76,7 +74,6 @@ class Hazard extends THREE.Group {
                 this.position.set(x, this.position.y, -125);
             }
         }
-
     }
 }
 

@@ -1,5 +1,5 @@
 import * as Dat from 'dat.gui';
-import { Scene, Color, PlaneGeometry, MeshStandardMaterial, Mesh, Vector2, Vector3, Texture, TextureLoader, RepeatWrapping, AudioObject } from 'three';
+import { Scene, Color, PlaneGeometry, MeshStandardMaterial, Mesh, Vector2, Vector3, Texture, TextureLoader, RepeatWrapping, AudioObject, TextGeometry } from 'three';
 import { BasicLights } from 'lights';
 import { Terrain } from '../objects/Terrain';
 import MovingHazard from '../objects/MovingHazard/MovingHazard';
@@ -105,13 +105,12 @@ class GameScene extends Scene {
     update(timeStamp) {
         const { rotationSpeed, updateList } = this.state;
         this.rotation.y = (rotationSpeed * timeStamp) / 10000;
+        const random = Math.round(Math.random() * 1000) % 150;
 
-        // Randomly add hazards to the scene
-        if (timeStamp < 10000000) {
+        if (timeStamp < 100000) {
             // const snow = new Snow(this);
             // this.add(snow);
             // this.addToUpdateList(snow);
-            // Randomly add hazards to the scene
             if (this.state.penguin.seenIce) {
                 this.state.speed -= 0.001;
                 if (this.state.speed <= this.state.defaultSpeed) {
@@ -120,11 +119,8 @@ class GameScene extends Scene {
                 }
             }
             if (!this.state.gameOver) {
-                // Move the snow texture.
-                this.planeTexture.offset.add(new Vector2(0, 0.1));
-                this.planeNormal.offset.add(new Vector2(0, 0.1));
-
-                if (Math.round(Math.random() * 10000) % 150 === 0) {
+                // Randomly add hazards to the scene
+                if (random === 0) {
                     const select = Math.random();
                     if (select <= 0.2) {
                         const ice = new Ice(this);
@@ -158,21 +154,27 @@ class GameScene extends Scene {
             }
         }
 
-        // Move the terrain.
-        /*
-        this.terrainOne.position.z += 1;
-        this.terrainTwo.position.z += 1;
-        if (this.terrainOne.position.z >= this.terrainOne.width) {
-            console.log('new trr')
-            this.terrainOne = this.terrainTwo;
-            this.terrainTwo = new Terrain();
-            this.terrainTwo.position.z -= this.terrainOne.width;
-        }*/
-
+        // Move the snow texture.
         if (!this.state.gameOver) {
-            this.planeTexture.offset.add(new Vector2(0, 0.1));
-            this.planeNormal.offset.add(new Vector2(0, 0.1));
+            this.planeTexture.offset.add(new Vector2(0, this.state.speed/5));
+            this.planeNormal.offset.add(new Vector2(0, this.state.speed/5));
+            // Increase the speed as time passes
+            if (Math.round(timeStamp) % 20 === 0) {
+                this.state.speed += 0.001;
+            }
         }
+
+        // Move the terrain.
+        // this.terrainOne.position.z += 1;
+        // this.terrainTwo.position.z += 1;
+        // if (this.terrainOne.position.z >= this.terrainOne.width) {
+        //     console.log('new trr')
+        //     this.terrainOne = this.terrainTwo;
+        //     this.terrainTwo = new Terrain();
+        //     this.terrainTwo.position.z -= this.terrainOne.width;
+        // }
+
+       
         
         // Call update for each object in the updateList
         for (const obj of updateList) {

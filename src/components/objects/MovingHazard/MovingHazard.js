@@ -41,7 +41,7 @@ class MovingHazard extends THREE.Group {
         }
 
         if (this.state.move && !scene.state.gameOver) {
-            this.translateZ(0.11);
+            this.translateZ(scene.state.speed);
 
             if (this.state.direction == 0) {
                 this.translateX(0.01);
