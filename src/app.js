@@ -85,11 +85,11 @@ import { GameScene } from 'scenes';
 
     // '<a name ="keys"></a>' +
     '<h1 class="display-5 pt-2" style="text-shadow: 2px 2px 4px black;" >Penguin Club</h1>' +
-    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Use your keyboard arrows to move your penguin in a way that avoids the abstacles given</p>' +
+    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Use your keyboard arrows to move your penguin in a way that avoids the abstacles given. You can avoid obstacles by moving right, left, or jumping over it. If the penguin slides over the ice patches its speed increases.</p>' +
     '<hr class="my-4">' +
-    '<div class="row"><div class="col"><span class="keys">W</span><p class="py-3">UP</p></div></div>' +
-    '<div class="row " style="padding-left:30%; padding-right:30%"><div class="col"><span><div class="float-sm-left"><span class="keys">A</span><p class="py-3">LEFT</p></div><div class="float-sm-right"><span class="keys">D</span><p class="py-3">RIGHT</p></div></span></div></div>' +
-    '<div class="row"><div class="col"><span class="keys">S</span><p class="py-3">DOWN</p></div></div>' +
+    '<div class="row"><div class="col"><span class="keys">^</span><p class="py-3">jump up</p></div></div>' +
+    '<div class="row " style="padding-left:30%; padding-right:30%"><div class="col"><span><div class="float-sm-left"><span class="keys"><</span><p class="py-3">move left</p></div><div class="float-sm-right"><span class="keys">></span><p class="py-3">move right</p></div></span></div></div>' +
+    '<div class="row"><div class="col">'+
     '<br>' +
     '<button class="btn btn-light btn-lg begin-btn" href="#" role="button" id="begin-btn">Begin</a>' +
     '</div>' +
