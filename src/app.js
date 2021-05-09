@@ -15,14 +15,17 @@ import { GameScene } from 'scenes';
     let endScene;
     console.log("here");
     let clicked = true;
-
+    // camera.position.set(0, 5, 11);
+    // camera.lookAt(new Vector3(0, 0, 0));
+    // console.log("start scene called");
     const scene = new GameScene();
     const camera = new PerspectiveCamera();
     const renderer = new WebGLRenderer({ antialias: true });
-
-    camera.position.set(0, 5, 11);
+    // Set up camera
+    camera.position.set(6, 3, -10);
     camera.lookAt(new Vector3(0, 0, 0));
-    // console.log("start scene called");
+    camera.position.set(0, 10, 25);
+    camera.lookAt(new Vector3(0, 0, 0));
 
 // // Set up renderer, canvas, and minor CSS adjustments
 //     renderer.setPixelRatio(window.devicePixelRatio);
@@ -258,13 +261,50 @@ window.onload=function(){
 //----
 
 // Render loop
+// const onAnimationFrameHandler = (timeStamp) => {
+//     if (clicked == true){
+//         controls.update();
+//         renderer.render(scene, camera);
+//         scene.update && scene.update(timeStamp);
+//         window.requestAnimationFrame(onAnimationFrameHandler);
+//     }
+// =======
+// Set up camera
+// camera.position.set(6, 3, -10);
+// camera.lookAt(new Vector3(0, 0, 0));
+// camera.position.set(0, 10, 25);
+// camera.lookAt(new Vector3(0, 0, 0));
+
+// Set up renderer, canvas, and minor CSS adjustments
+// renderer.setPixelRatio(window.devicePixelRatio);
+// const canvas = renderer.domElement;
+// canvas.style.display = 'block'; // Removes padding below canvas
+// document.body.style.margin = 0; // Removes margin around page
+// document.body.style.overflow = 'hidden'; // Fix scrolling
+// document.body.appendChild(canvas);
+
+// Set up score
+let score = 0;
+let scoreDiv = document.createElement('div');
+scoreDiv.id = 'score';
+scoreDiv.innerHTML = 'Score: ' + score;
+document.body.appendChild(scoreDiv);
+
+// Set up controls
+// const controls = new OrbitControls(camera, canvas);
+// controls.enableDamping = true;
+// controls.enablePan = false;
+// controls.minDistance = 4;
+// controls.maxDistance = 16;
+// controls.update();
+
+// Render loop
 const onAnimationFrameHandler = (timeStamp) => {
-    if (clicked == true){
-        controls.update();
-        renderer.render(scene, camera);
-        scene.update && scene.update(timeStamp);
-        window.requestAnimationFrame(onAnimationFrameHandler);
-    }
+    controls.update();
+    renderer.render(scene, camera);
+    scene.update && scene.update(timeStamp);
+    document.getElementById('score').innerHTML = 'Score: ' + score;
+    window.requestAnimationFrame(onAnimationFrameHandler);
 };
 window.requestAnimationFrame(onAnimationFrameHandler);
 
@@ -285,3 +325,22 @@ window.addEventListener("keydown", function(e) {
 window.addEventListener("keyup", function(e) {
     scene.handleKeyUp(e)
 }, false);
+
+// const slip = new AudioObject('src/components/sounds/slip.mp3', 0, 1, false);
+// scene.add(slip);
+
+// create an AudioListener and add it to the camera
+// const listener = new THREE.AudioListener();
+// camera.add( listener );
+
+// // create a global audio source
+// const sound = new THREE.Audio( listener );
+
+// // load a sound and set it as the Audio object's buffer
+// const audioLoader = new THREE.AudioLoader();
+// audioLoader.load( 'src/components/sounds/sled_racing.m4a', function( buffer ) {
+// 	sound.setBuffer( buffer );
+// 	sound.setLoop( true );
+// 	sound.setVolume( 0.5 );
+// 	sound.play();
+// });

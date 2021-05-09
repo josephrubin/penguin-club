@@ -1,32 +1,39 @@
 import * as Dat from 'dat.gui';
-import { Scene, Color, PlaneGeometry, MeshStandardMaterial, Mesh, Vector2, Vector3, Texture, TextureLoader, RepeatWrapping } from 'three';
+import { Scene, Color, PlaneGeometry, MeshStandardMaterial, Mesh, Vector2, Vector3, Texture, TextureLoader, RepeatWrapping, AudioObject, TextGeometry } from 'three';
 import { BasicLights } from 'lights';
-import { Penguin, Log, Rock, Ice} from '../objects';
 import { Terrain } from '../objects/Terrain';
+import MovingHazard from '../objects/MovingHazard/MovingHazard';
+import { Penguin, Ice, Snow, Hazard } from '../objects';
+import * as THREE from 'three';
 
 class GameScene extends Scene {
     constructor() {
         // Call parent Scene() constructor
         super();
-
+    
         // Init state
         this.state = {
             gui: new Dat.GUI(), // Create GUI for scene
             rotationSpeed: 0,
             updateList: [],
+            tiles: [],
+
             penguin: null,
             keys: {
                 ArrowLeft: false,
                 ArrowRight: false
             },
             gameOver: false,
+            cameraPosition: new THREE.Vector3(0, 1, 10),
+            defaultSpeed: 0.3,
+            speed: 0.3
         };
 
         // Set background to a nice color
         this.background = new Color(0x7ec0ee);
-
+        
         // Create the ramp plane
-        const geo = new PlaneGeometry(20, 250);
+        const geo = new PlaneGeometry(20, 550);
         //const planeMaterial = new MeshBasicMaterial({color: 0xffffff});
 
         this.planeTexture = new TextureLoader().load(
@@ -54,7 +61,7 @@ class GameScene extends Scene {
         // Add meshes to scene
         const lights = new BasicLights();
         this.state.penguin = new Penguin();
-        this.add(lights, this.state.penguin, plane);
+        this.add(lights, plane, this.state.penguin);
 
         // Add the terrain.
         this.terrainOne = new Terrain();
@@ -69,7 +76,7 @@ class GameScene extends Scene {
         this.addToUpdateList(this.state.penguin);
 
         // Populate GUI
-        //this.state.gui.add(this.state.penguin, 'rotationSpeed', -5, 5);
+        // this.state.gui.add(this.state.penguin, 'rotationSpeed', -5, 5);
     }
 
     /** Pass along key events to all objects in this scene. */
@@ -91,60 +98,87 @@ class GameScene extends Scene {
         this.state.updateList.push(object);
     }
 
+    removeFromUpdateList() {
+        this.state.updateList.splice(1, 1);
+    }
+
     update(timeStamp) {
         const { rotationSpeed, updateList } = this.state;
         this.rotation.y = (rotationSpeed * timeStamp) / 10000;
+        const random = Math.round(Math.random() * 1000) % 150;
 
-        // Randomly add hazards to the scene
-        if (!this.state.gameOver && Math.round(Math.random() * 10000) % 150 === 0) {
-            // x is a random position (left to right) on the ramp
-            const x = (Math.random() * 19) - 9.5;
-            const select = Math.round(Math.random() * 2);
-
-            // Add a log
-            if (select === 0) {
-                const log = new Log(this);
-                log.position.x = x;
-                this.add(log);
-                this.addToUpdateList(log);
+        if (timeStamp < 100000) {
+            // const snow = new Snow(this);
+            // this.add(snow);
+            // this.addToUpdateList(snow);
+            if (this.state.penguin.seenIce) {
+                this.state.speed -= 0.001;
+                if (this.state.speed <= this.state.defaultSpeed) {
+                    this.state.penguin.seenIce = false;
+                    this.state.speed = this.state.defaultSpeed;
+                }
             }
+            if (!this.state.gameOver) {
+                // Randomly add hazards to the scene
+                if (random === 0) {
+                    const select = Math.random();
+                    if (select <= 0.2) {
+                        const ice = new Ice(this);
+                        this.addToUpdateList(ice);
+                        this.add(ice);
+                    }
 
-            // Add a rock
-            else if (select === 1) {
-                const rock = new Rock(this);
-                rock.position.x = x;
-                this.add(rock);
-                this.addToUpdateList(rock);
+                    else if (select <= 0.8) {
+                        const hazard = new Hazard(this);
+                        this.addToUpdateList(hazard);
+                        this.add(hazard);
+                    }
+
+                    // Add a moving hazard
+                    else {
+                        const direction = Math.floor(Math.random() * 2);
+                        const LEFT = 0;
+
+                        const movingHazard = new MovingHazard(this, direction);
+
+                        // Always start the moving hazards on the left or right.
+                        if (direction == LEFT) {
+                            movingHazard.position.x = -9.5;
+                        } else {
+                            movingHazard.position.x = 9.5;
+                        }
+                        this.add(movingHazard);
+                        this.addToUpdateList(movingHazard);
+                    }
+                }
             }
-
-            // Add ice
-            // else {
-            //     const ice = new Ice(this);
-            //     // ice.position.x = x;
-            //     this.add(ice);
-            //     this.addToUpdateList(ice);
-            // }
-
         }
 
         // Move the snow texture.
-        this.planeTexture.offset.add(new Vector2(0, 0.1));
-        this.planeNormal.offset.add(new Vector2(0, 0.1));
+        if (!this.state.gameOver) {
+            this.planeTexture.offset.add(new Vector2(0, this.state.speed/5));
+            this.planeNormal.offset.add(new Vector2(0, this.state.speed/5));
+            // Increase the speed as time passes
+            if (Math.round(timeStamp) % 20 === 0) {
+                this.state.speed += 0.001;
+            }
+        }
 
         // Move the terrain.
-        /*
-        this.terrainOne.position.z += 1;
-        this.terrainTwo.position.z += 1;
-        if (this.terrainOne.position.z >= this.terrainOne.width) {
-            console.log('new trr')
-            this.terrainOne = this.terrainTwo;
-            this.terrainTwo = new Terrain();
-            this.terrainTwo.position.z -= this.terrainOne.width;
-        }*/
+        // this.terrainOne.position.z += 1;
+        // this.terrainTwo.position.z += 1;
+        // if (this.terrainOne.position.z >= this.terrainOne.width) {
+        //     console.log('new trr')
+        //     this.terrainOne = this.terrainTwo;
+        //     this.terrainTwo = new Terrain();
+        //     this.terrainTwo.position.z -= this.terrainOne.width;
+        // }
 
+       
+        
         // Call update for each object in the updateList
         for (const obj of updateList) {
-            obj.update(timeStamp, this.state);
+            obj.update(timeStamp, this);
         }
     }
 }
