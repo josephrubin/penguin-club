@@ -28,7 +28,7 @@ class Hazard extends THREE.Group {
             gltf.scene.scale.set(10, 10, 10);
             this.add(gltf.scene);
         });
-        const x = (Math.random() * 19) - 9.5;
+        let x = -(Math.random() * 19);
         this.position.set(x, -8, -125);
     }
 
@@ -47,8 +47,8 @@ class Hazard extends THREE.Group {
         // Randomly select one of three hazards, each with
         // 1/3 chance of being generated
         const random = Math.random();
-        if (random <= 0.33) this.generateTree(loader);
-        else if (random <= 0.67) this.generateTree(loader);
+        if (random <= 0.33) this.generateRock(loader);
+        else if (random <= 0.67) this.generateLog(loader);
         else this.generateTree(loader);
 
         // Add self to parent's update list
@@ -70,8 +70,15 @@ class Hazard extends THREE.Group {
             this.translateZ(scene.state.speed);
             if (this.position.z > scene.state.cameraPosition.z) {
                 // x is a random position (left to right) on the ramp
-                const x = (Math.random() * 19) - 9.5;
-                this.position.set(x, this.position.y, -125);
+                if (this.name === 'tree') {
+                    const x = -(Math.random() * 19);
+                    this.position.set(x, this.position.y, -125);
+                }
+                else {
+                    const x = (Math.random() * 19) - 9.5;
+                    this.position.set(x, this.position.y, -125);
+                }
+                
             }
         }
     }

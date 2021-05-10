@@ -3,7 +3,7 @@ import { Scene, Color, PlaneGeometry, MeshStandardMaterial, Mesh, Vector2, Vecto
 import { BasicLights } from 'lights';
 import { Terrain } from '../objects/Terrain';
 import MovingHazard from '../objects/MovingHazard/MovingHazard';
-import { Penguin, Ice, Snow, Hazard } from '../objects';
+import { Penguin, Ice, Snow, Hazard, Fish } from '../objects';
 import * as THREE from 'three';
 
 import { WebGLRenderer, PerspectiveCamera } from 'three';
@@ -126,6 +126,9 @@ class GameScene extends Scene {
             if (!this.state.gameOver) {
                 // Randomly add hazards to the scene
                 if (random === 0) {
+                    const fish = new Fish(this);
+                    this.addToUpdateList(fish);
+                    this.add(fish);
                     const select = Math.random();
                     if (select <= 0.2) {
                         const ice = new Ice(this);
