@@ -169,7 +169,10 @@ class GameScene extends Scene {
             this.planeNormal.offset.add(new Vector2(0, this.state.speed/5));
             // Increase the speed as time passes
             if (Math.round(timeStamp) % 20 === 0) {
-                this.state.speed += 0.001;
+                //max the speed
+                if (this.state.speed <= 0.2){
+                    this.state.speed += 0.001;
+                }
             }
         }
 
