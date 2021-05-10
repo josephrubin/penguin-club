@@ -6,6 +6,9 @@ import MovingHazard from '../objects/MovingHazard/MovingHazard';
 import { Penguin, Ice, Snow, Hazard, Fish } from '../objects';
 import * as THREE from 'three';
 
+import { WebGLRenderer, PerspectiveCamera } from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
 class GameScene extends Scene {
     constructor() {
         // Call parent Scene() constructor
@@ -26,7 +29,10 @@ class GameScene extends Scene {
             gameOver: false,
             cameraPosition: new THREE.Vector3(0, 1, 10),
             defaultSpeed: 0.3,
-            speed: 0.3
+            speed: 0.3,
+
+            score: 0, 
+            lives: 3
         };
 
         // Set background to a nice color
@@ -107,6 +113,11 @@ class GameScene extends Scene {
         this.rotation.y = (rotationSpeed * timeStamp) / 10000;
         const random = Math.round(Math.random() * 1000) % 150;
 
+        this.state.score++;
+        document.getElementById('score').innerHTML = 'Score: ' + String(this.state.score);
+
+        document.getElementById('lives').innerHTML = 'Lives: ' + String(this.state.lives);
+
         if (timeStamp < 100000) {
             // const snow = new Snow(this);
             // this.add(snow);
@@ -155,6 +166,7 @@ class GameScene extends Scene {
                     }
                 }
             }
+
         }
 
         // Move the snow texture.
@@ -163,7 +175,10 @@ class GameScene extends Scene {
             this.planeNormal.offset.add(new Vector2(0, this.state.speed/5));
             // Increase the speed as time passes
             if (Math.round(timeStamp) % 20 === 0) {
-                this.state.speed += 0.001;
+                //max the speed
+                if (this.state.speed <= 0.2){
+                    this.state.speed += 0.001;
+                }
             }
         }
 
@@ -176,9 +191,93 @@ class GameScene extends Scene {
         //     this.terrainTwo = new Terrain();
         //     this.terrainTwo.position.z -= this.terrainOne.width;
         // }
+        if (this.state.gameOver) {
+            window.gameShouldRun = false;
+            
+            console.log("gameOver");
+            let headID = document.getElementsByTagName('head')[0];
+            let link = document.createElement("link");
+            link.type = 'text/css';
+            link.rel = 'stylesheet';
+            link.href = "https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap";
+            headID.appendChild(link);
 
-       
-        
+            let box = document.createElement("DIV");
+            box.id = 'LoadingPage';
+            box.height = '100%';
+            box.weigth = '100%';
+             // adapted from bootstrap docs
+            let html = '<style type="text/css">' +
+            'body, p, h1, h2, h3, h4, h5, a' +
+            '{ font-family:  Arial, Helvetica, sans-serif; }' +
+            '.jumbotron { background: none; }' +
+            '.keys { display: inline:block; font-size: 20px;}' +
+            'input { max-height: 20px;}' +
+            'hr { color: white;}' +
+            '.box {z-index: 10; position:absolute; top:0; width: 100%}' +
+            '@media only screen and (max-width: 767px) { .p-large { font-size: 1.0rem; } .display-4,.display-5 { font-size: 1.5rem; }}' +
+            '@media only screen and (min-width: 768px) { .p-large, { font-size: 1.4rem; } .display-4,.display-5 { font-size: 1.7rem; }}' +
+            '@media only screen and (min-width: 992px) { .p-large { font-size: 1.8rem; } .display-4,.display-5 { font-size: 2.6rem; } } }' +
+            '</style>' +
+            '<div class="container-fluid box text-center" style="background: linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 100%);">' +
+            '<div class="text container p-5" style="color: white;">' +
+            '<div class="jumbotron">' +
+            '<h1 class="display-5 pt-2" style="text-shadow: 2px 2px 4px black;" >GAME OVER</h1>' +
+            '<p class="lead" style="text-shadow: 3px 3px 6px black;">Press the button bellow to play again!</p>' +
+            '<hr class="my-4">' +
+            '<p class="lead" style="text-shadow: 3px 3px 6px black;"></p>' +
+            '<hr class="my-4">' +
+            '<div class="row"><div class="col"><span class="keys">^</span><p class="py-3">jump up</p></div></div>' +
+            '<div class="row " style="padding-left:30%; padding-right:30%"><div class="col"><span><div class="float-sm-left"><span class="keys"><</span><p class="py-3">move left</p></div><div class="float-sm-right"><span class="keys">></span><p class="py-3">move right</p></div></span></div></div>' +
+            '<div class="row"><div class="col">'+
+            '<br>' +
+            '<button class="btn btn-light btn-lg begin-btn" href="#" role="button" id="begin-btn">Play Again</a>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+
+            box.innerHTML = html;
+            document.body.appendChild(box);
+
+            let bootstrap = '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">';
+            document.head.innerHTML += bootstrap;
+
+            let guifix = '<style type="text/css">' +
+            'input { max-height: 20px; margin:1px!important; padding:1px!important;}' +
+            '.dg .cr.number input[type=text], .dg .c input[type=text] { max-height: 20px; margin:1px; padding-bottom:2px;}' +
+            '.box {z-index: 10; position:absolute; top:0;}' +
+            '</style>';
+            document.head.innerHTML += guifix;
+
+            let allKeys = document.getElementsByClassName("keys");
+            for (let i = 0; i < allKeys.length; i++){
+            allKeys[i].style.display = 'inline-block';
+            allKeys[i].style.width = '35px';
+            allKeys[i].style.height = '35px';
+            allKeys[i].style.border = '1px solid white';
+            allKeys[i].style.borderRadius = '2px 2px 2px 2px';
+            allKeys[i].style.moxBorderRadius = '2px 2px 2px 2px';
+            allKeys[i].style.moxBoxSizing = 'border-box !important';
+            allKeys[i].style.webkitBoxSizing = 'border-box !important';
+            allKeys[i].style.boxSizing = 'border-box !important';
+            allKeys[i].style.webkitBoxShadow = '0px 3px 0px -2px rgba(255,255,255,1), 0px 2px 0px 0px white';
+            allKeys[i].style.moxBoxShadow = '0px 3px 0px -2px rgba(255,255,255,1), 0px 2px 0px 0px white';
+            allKeys[i].style.boxShadow = '0px 3px 0px -2px rgba(255,255,255,1), 0px 2px 0px 0px white';
+            allKeys[i].style.cursor = 'pointer';
+            allKeys[i].style.marginLeft = '15px';
+            allKeys[i].style.marginRight = '15px';
+            }
+
+            let btn = document.getElementById('begin-btn');
+            btn.addEventListener("click", function(){
+                console.log("button hit");
+                let loadingPage = document.getElementById('LoadingPage');
+                document.body.removeChild(loadingPage);
+                window.location.reload();
+            })
+        }
+
+            
         // Call update for each object in the updateList
         for (const obj of updateList) {
             obj.update(timeStamp, this);
