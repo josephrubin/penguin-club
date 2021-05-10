@@ -57,7 +57,7 @@ import { GameScene } from 'scenes';
 
     let box = document.createElement("DIV");
     box.id = 'LoadingPage';
-    box.height = '100%';
+    box.style.height = '100vh';
     box.weigth = '100%';
      // adapted from bootstrap docs
     let html = '<style type="text/css">' +
@@ -128,10 +128,13 @@ import { GameScene } from 'scenes';
     allKeys[i].style.marginRight = '15px';
     }
 
+window.gameShouldRun = false;
+
 // Referenced the following:
 window.onload=function(){
     document.querySelectorAll(".begin-btn").forEach(function(btn){
     btn.addEventListener("click", function(){
+        window.gameShouldRun = true;
         let loadingPage = document.getElementById('LoadingPage');
         document.body.removeChild(loadingPage);
         document.body.appendChild( VRButton.createButton( renderer ) );
@@ -156,6 +159,7 @@ window.onload=function(){
     controls.enablePan = false;
     controls.minDistance = 4;
     controls.maxDistance = 16;
+    controls.enabled = false;
     controls.update();
 // window.onload=function(){
 //     var btn = document.getElementById('begin-btn'); 
@@ -288,6 +292,12 @@ let score = 0;
 let scoreDiv = document.createElement('div');
 scoreDiv.id = 'score';
 scoreDiv.innerHTML = 'Score: ' + score;
+scoreDiv.style.position = 'absolute';
+scoreDiv.style.left = '28px'
+scoreDiv.style.top = '12px'
+scoreDiv.style.zIndex = '1000'
+scoreDiv.style.color = 'white'
+scoreDiv.style.fontSize = '3em'
 document.body.appendChild(scoreDiv);
 
 // Set up controls
@@ -302,8 +312,9 @@ document.body.appendChild(scoreDiv);
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
     renderer.render(scene, camera);
-    scene.update && scene.update(timeStamp);
-    document.getElementById('score').innerHTML = 'Score: ' + score;
+    if (window.gameShouldRun) {
+        scene.update && scene.update(timeStamp);
+    }
     window.requestAnimationFrame(onAnimationFrameHandler);
 };
 window.requestAnimationFrame(onAnimationFrameHandler);

@@ -31,7 +31,9 @@ class GameScene extends Scene {
             gameOver: false,
             cameraPosition: new THREE.Vector3(0, 1, 10),
             defaultSpeed: 0.3,
-            speed: 0.3
+            speed: 0.3,
+
+            score: 0
         };
 
         // Set background to a nice color
@@ -112,6 +114,9 @@ class GameScene extends Scene {
         this.rotation.y = (rotationSpeed * timeStamp) / 10000;
         const random = Math.round(Math.random() * 1000) % 150;
 
+        this.state.score++;
+        document.getElementById('score').innerHTML = String(this.state.score);
+
         if (timeStamp < 100000) {
             // const snow = new Snow(this);
             // this.add(snow);
@@ -186,6 +191,8 @@ class GameScene extends Scene {
         //     this.terrainTwo.position.z -= this.terrainOne.width;
         // }
         if (this.state.gameOver) {
+            window.gameShouldRun = false;
+            
             console.log("gameOver");
             let headID = document.getElementsByTagName('head')[0];
             let link = document.createElement("link");
@@ -269,7 +276,7 @@ class GameScene extends Scene {
             allKeys[i].style.marginRight = '15px';
             }
 
-            let btn = document.getElementById('.begin-btn');
+            let btn = document.getElementById('begin-btn');
             btn.addEventListener("click", function(){
                 console.log("button hit");
                 let loadingPage = document.getElementById('LoadingPage');

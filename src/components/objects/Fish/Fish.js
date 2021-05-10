@@ -71,7 +71,7 @@ class Fish extends THREE.Group {
         const penguinBox = new THREE.Box3().setFromObject(scene.state.penguin);
         const collision = hazardBox.intersectsBox(penguinBox);
         if (collision) {
-            scene.state.score += 1;
+            scene.state.score += 5000;
             const x = (Math.random() * 19) - 9.5;
             this.position.set(x, this.position.y, -125);
         }

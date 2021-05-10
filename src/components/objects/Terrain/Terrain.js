@@ -34,10 +34,6 @@ class Terrain extends Group {
                 vertex.y = -5.8 + 5 * this.perlin(perlinX, perlinY);
             }
         }
-        for (let i = 0; i < this.geometry.vertices.length; i++) {
-            //this.geometry.vertices[i].y = -4 + Math.random() * 2;
-        }
-        console.log(this.geometry.vertices.length)
         this.geometry.verticesNeedUpdate = true;
         this.geometry.computeFaceNormals();
         this.geometry.computeVertexNormals();
@@ -55,10 +51,6 @@ class Terrain extends Group {
             face.color.setRGB(factor, factor, factor);
         });
         this.geometry.colorsNeedUpdate = true;
-
-        //this.geometry.position.y = 0;
-
-        //console.log(this.perlin(40.11764705882353, 30.019607843137255))
 
         this.add(this.mesh);
     }
