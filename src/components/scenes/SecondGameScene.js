@@ -9,7 +9,6 @@ import * as THREE from 'three';
 import { WebGLRenderer, PerspectiveCamera } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 // import { GameScene } from 'scenes';
-// import { SecondGameScene } from 'scenes';
 
 class GameScene extends Scene {
     constructor() {
@@ -157,7 +156,6 @@ class GameScene extends Scene {
                     }
                 }
             }
-
         }
 
         // Move the snow texture.
@@ -170,17 +168,17 @@ class GameScene extends Scene {
             }
         }
 
-        // Move the terrain.
-        // this.terrainOne.position.z += 1;
-        // this.terrainTwo.position.z += 1;
-        // if (this.terrainOne.position.z >= this.terrainOne.width) {
-        //     console.log('new trr')
-        //     this.terrainOne = this.terrainTwo;
-        //     this.terrainTwo = new Terrain();
-        //     this.terrainTwo.position.z -= this.terrainOne.width;
-        // }
-        if (this.state.gameOver) {
-            console.log("gameOver");
+        if (this.state.gameOver){
+            // console.log("game over");
+            const scene = new GameScene();
+            const camera = new PerspectiveCamera();
+            const renderer = new WebGLRenderer({ antialias: true });
+            // Set up camera
+            camera.position.set(6, 3, -10);
+            camera.lookAt(new Vector3(0, 0, 0));
+            camera.position.set(0, 10, 25);
+            camera.lookAt(new Vector3(0, 0, 0));
+
             let headID = document.getElementsByTagName('head')[0];
             let link = document.createElement("link");
             link.type = 'text/css';
@@ -189,7 +187,7 @@ class GameScene extends Scene {
             headID.appendChild(link);
 
             let box = document.createElement("DIV");
-            box.id = 'LoadingPage';
+            box.id = 'LoadingPage2';
             box.height = '100%';
             box.weigth = '100%';
              // adapted from bootstrap docs
@@ -205,28 +203,17 @@ class GameScene extends Scene {
             '@media only screen and (min-width: 768px) { .p-large, { font-size: 1.4rem; } .display-4,.display-5 { font-size: 1.7rem; }}' +
             '@media only screen and (min-width: 992px) { .p-large { font-size: 1.8rem; } .display-4,.display-5 { font-size: 2.6rem; } } }' +
             '</style>' +
-            '<div class="container-fluid box text-center" style="background: linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 100%);">' +
+            '<div class="container-fluid box text-center" style="background: linear-gradient(90deg, rgba(16,105,164,1) 0%, rgba(255,255,255,1) 100%);">' +
             '<div class="text container p-5" style="color: white;">' +
             '<div class="jumbotron">' +
-            // '<h1 class="display-4">Penguin Club</h1>' +
-            // '<hr class="my-4">' +
-            // '<p class="p-large">Navigate your penguin down the slope</p>' +
-            // '<a class="btn btn-light btn-lg" href="#keys" role="button">Get Started</a>' +
-            // '<br>' +
-            // '<hr class="my-4">' +
-            // '<br>' +
-
-            // '<a name ="keys"></a>' +
-            '<h1 class="display-5 pt-2" style="text-shadow: 2px 2px 4px black;" >GAME OVER</h1>' +
-            '<p class="lead" style="text-shadow: 3px 3px 6px black;">Press the button bellow to play again!</p>' +
-            '<hr class="my-4">' +
-            '<p class="lead" style="text-shadow: 3px 3px 6px black;"></p>' +
+            '<h1 class="display-5 pt-2" style="text-shadow: 2px 2px 4px black;" >Penguin Club</h1>' +
+            '<p class="lead" style="text-shadow: 3px 3px 6px black;">Use your keyboard arrows to move your penguin in a way that avoids the abstacles given. You can avoid obstacles by moving right, left, or jumping over it. If the penguin slides over the ice patches its speed increases.</p>' +
             '<hr class="my-4">' +
             '<div class="row"><div class="col"><span class="keys">^</span><p class="py-3">jump up</p></div></div>' +
             '<div class="row " style="padding-left:30%; padding-right:30%"><div class="col"><span><div class="float-sm-left"><span class="keys"><</span><p class="py-3">move left</p></div><div class="float-sm-right"><span class="keys">></span><p class="py-3">move right</p></div></span></div></div>' +
             '<div class="row"><div class="col">'+
             '<br>' +
-            '<button class="btn btn-light btn-lg begin-btn" href="#" role="button" id="begin-btn">Play Again</a>' +
+            '<button class="btn btn-light btn-lg begin-btn" href="#" role="button" id="begin-btn">Begin</a>' +
             '</div>' +
             '</div>' +
             '</div>';
@@ -263,25 +250,81 @@ class GameScene extends Scene {
             allKeys[i].style.marginRight = '15px';
             }
 
-            let btn = document.getElementById('.begin-btn');
-            btn.addEventListener("click", function(){
-                console.log("button hit");
-                let loadingPage = document.getElementById('LoadingPage');
-                document.body.removeChild(loadingPage);
-                window.location.reload();
-            })
+            window.onload=function(){
+                document.querySelectorAll(".begin-btn").forEach(function(btn){
+                btn.addEventListener("click", function(){
+                    let loadingPage = document.getElementById('LoadingPage2');
+                    document.body.removeChild(loadingPage);
+                    document.body.appendChild( VRButton.createButton( renderer ) );
+                    document.body.style.overflow = 'hidden'; // Fix scrolling
+                    tour.start();
+                  })
+                  })
+            }
 
-            // document.querySelectorAll(".begin-btn").forEach(function(btn){
-            //     btn.addEventListener("click", function(){
-            //         console.log("button hit");
-            //         let loadingPage = document.getElementById('LoadingPage');
-            //         document.body.removeChild(loadingPage);
-            //         window.location.reload();
-            //     })
-            // }
+            renderer.setPixelRatio(window.devicePixelRatio);
+            const canvas = renderer.domElement;
+            // canavs.style.innerHeight = 100;
+            canvas.style.display = 'block'; // Removes padding below canvas
+            document.body.style.margin = 0; // Removes margin around page
+            document.body.style.overflow = 'hidden'; // Fix scrolling
+            document.body.appendChild(canvas);
+
+            // Set up controls
+            const controls = new OrbitControls(camera, canvas);
+            controls.enableDamping = true;
+            controls.enablePan = false;
+            controls.minDistance = 4;
+            controls.maxDistance = 16;
+            controls.update();
+            // Set up score
+            let score = 0;
+            let scoreDiv = document.createElement('div');
+            scoreDiv.id = 'score';
+            scoreDiv.innerHTML = 'Score: ' + score;
+            document.body.appendChild(scoreDiv);
+            // Render loop
+            const onAnimationFrameHandler = (timeStamp) => {
+                controls.update();
+                renderer.render(scene, camera);
+                scene.update && scene.update(timeStamp);
+                document.getElementById('score').innerHTML = 'Score: ' + score;
+                window.requestAnimationFrame(onAnimationFrameHandler);
+            };
+            window.requestAnimationFrame(onAnimationFrameHandler);
+
+            // Resize Handler
+            const windowResizeHandler = () => {
+                const { innerHeight, innerWidth } = window;
+                renderer.setSize(innerWidth, innerHeight);
+                camera.aspect = innerWidth / innerHeight;
+                camera.updateProjectionMatrix();
+            };
+            windowResizeHandler();
+            window.addEventListener('resize', windowResizeHandler, false);
+
+            window.addEventListener("keydown", function(e) {
+                scene.handleKeyDown(e)
+            }, false);
+
+            window.addEventListener("keyup", function(e) {
+                scene.handleKeyUp(e)
+            }, false);
+
         }
 
-            
+        // Move the terrain.
+        // this.terrainOne.position.z += 1;
+        // this.terrainTwo.position.z += 1;
+        // if (this.terrainOne.position.z >= this.terrainOne.width) {
+        //     console.log('new trr')
+        //     this.terrainOne = this.terrainTwo;
+        //     this.terrainTwo = new Terrain();
+        //     this.terrainTwo.position.z -= this.terrainOne.width;
+        // }
+
+       
+        
         // Call update for each object in the updateList
         for (const obj of updateList) {
             obj.update(timeStamp, this);
