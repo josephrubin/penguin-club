@@ -77,17 +77,17 @@ window.addEventListener("keyup", function(e) {
 // scene.add(slip);
 
 // create an AudioListener and add it to the camera
-// const listener = new THREE.AudioListener();
-// camera.add( listener );
+const listener = new THREE.AudioListener();
+camera.add( listener );
 
-// // create a global audio source
-// const sound = new THREE.Audio( listener );
+// create a global audio source
+const sound = new THREE.Audio( listener );
 
-// // load a sound and set it as the Audio object's buffer
-// const audioLoader = new THREE.AudioLoader();
-// audioLoader.load( 'src/components/sounds/sled_racing.m4a', function( buffer ) {
-// 	sound.setBuffer( buffer );
-// 	sound.setLoop( true );
-// 	sound.setVolume( 0.5 );
-// 	sound.play();
-// });
+// load a sound and set it as the Audio object's buffer
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load( 'src/components/sounds/sled_racing.m4a', function( buffer ) {
+	sound.setBuffer( buffer );
+	sound.setLoop( true );
+	sound.setVolume( 0.5 );
+	sound.play();
+});
