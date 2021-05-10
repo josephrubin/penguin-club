@@ -8,8 +8,6 @@ import * as THREE from 'three';
 
 import { WebGLRenderer, PerspectiveCamera } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-// import { GameScene } from 'scenes';
-// import { SecondGameScene } from 'scenes';
 
 class GameScene extends Scene {
     constructor() {
@@ -221,15 +219,6 @@ class GameScene extends Scene {
             '<div class="container-fluid box text-center" style="background: linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 100%);">' +
             '<div class="text container p-5" style="color: white;">' +
             '<div class="jumbotron">' +
-            // '<h1 class="display-4">Penguin Club</h1>' +
-            // '<hr class="my-4">' +
-            // '<p class="p-large">Navigate your penguin down the slope</p>' +
-            // '<a class="btn btn-light btn-lg" href="#keys" role="button">Get Started</a>' +
-            // '<br>' +
-            // '<hr class="my-4">' +
-            // '<br>' +
-
-            // '<a name ="keys"></a>' +
             '<h1 class="display-5 pt-2" style="text-shadow: 2px 2px 4px black;" >GAME OVER</h1>' +
             '<p class="lead" style="text-shadow: 3px 3px 6px black;">Press the button bellow to play again!</p>' +
             '<hr class="my-4">' +
@@ -283,15 +272,6 @@ class GameScene extends Scene {
                 document.body.removeChild(loadingPage);
                 window.location.reload();
             })
-
-            // document.querySelectorAll(".begin-btn").forEach(function(btn){
-            //     btn.addEventListener("click", function(){
-            //         console.log("button hit");
-            //         let loadingPage = document.getElementById('LoadingPage');
-            //         document.body.removeChild(loadingPage);
-            //         window.location.reload();
-            //     })
-            // }
         }
 
             
