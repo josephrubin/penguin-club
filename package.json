@@ -1,6 +1,6 @@
 {
   "name": "penguin-club",
-  "repository": "github:josephrubin/penguin-club",
+  "repository": "penguin-club",
   "version": "0.1.0",
   "title": "Penguin Club",
   "description": "A 3D sledding game for the 426 final project.",
