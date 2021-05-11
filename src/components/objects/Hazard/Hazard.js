@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { AudioObject } from 'three';
+import { AudioObject, Vector3 } from 'three';
 
 class Hazard extends THREE.Group {
     generateRock(loader) {
@@ -61,8 +61,11 @@ class Hazard extends THREE.Group {
         const hazardBox = new THREE.Box3().setFromObject(this);
         const penguinBox = new THREE.Box3().setFromObject(scene.state.penguin);
         const collision = hazardBox.intersectsBox(penguinBox);
+
+        // Handle collisions
         if (collision && !scene.state.gameOver) {
             scene.state.lives--;
+            // Reset the position of the hazard
             // x is a random position (left to right) on the ramp
             if (this.name === 'tree') {
                 const x = -(Math.random() * 19);
@@ -78,9 +81,13 @@ class Hazard extends THREE.Group {
             }
         }
 
+        // During gameplay, continuously move hazards forward
         if (this.state.move && !scene.state.gameOver) {
             this.translateZ(scene.state.speed);
+
+            // When the objects are no longer visible
             if (this.position.z > scene.state.cameraPosition.z) {
+                // Reset the position of the hazard
                 // x is a random position (left to right) on the ramp
                 if (this.name === 'tree') {
                     const x = -(Math.random() * 19);
