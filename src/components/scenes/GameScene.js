@@ -85,6 +85,14 @@ class GameScene extends Scene {
         // Add objects to update list.
         this.addToUpdateList(this.state.penguin);
 
+        // Tube
+        const geometry = new THREE.TorusGeometry( 0.8, 0.3, 16, 100 );
+        const material = new THREE.MeshPhongMaterial( { color: 0xf92002 } );
+        const torus = new THREE.Mesh( geometry, material );
+        torus.rotation.x = 1.5;
+        torus.position.set(0, 0, 0);
+        this.add( torus );
+
         // Populate GUI
         // this.state.gui.add(this.state.penguin, 'rotationSpeed', -5, 5);
     }
