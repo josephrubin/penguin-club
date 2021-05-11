@@ -7,8 +7,8 @@ import { Penguin, Ice, Snow, Hazard, Fish } from '../objects';
 import * as THREE from 'three';
 import puffleLink from './puffle.png';
 
-import { WebGLRenderer, PerspectiveCamera } from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+// import { WebGLRenderer, PerspectiveCamera } from 'three';
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 import { WebGLRenderer, PerspectiveCamera } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
