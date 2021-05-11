@@ -289,16 +289,6 @@
  // document.body.style.overflow = 'hidden'; // Fix scrolling
  // document.body.appendChild(canvas);
  
- let scoreContainer = document.createElement('div');
- scoreContainer.id = 'score-container';
- scoreContainer.style.position = 'absolute';
- scoreContainer.style.left = '10px';
- scoreContainer.style.top = '10px';
- scoreContainer.style.backgroundColor = 'white';
- scoreContainer.innerHTML = '<div style="width:350px;height:150px;"></div>';
- scoreContainer.style.zIndex = '1000';
- document.body.appendChild(scoreContainer);
-
  // Set up score
  let score = 0;
  let scoreDiv = document.createElement('div');
@@ -306,11 +296,11 @@
  scoreDiv.innerHTML = 'Score: ' + score;
  scoreDiv.style.position = 'absolute';
  scoreDiv.style.left = '28px'
- scoreDiv.style.top = '12px'
+ scoreDiv.style.top = '0px'
  scoreDiv.style.zIndex = '1000';
  scoreDiv.style.color = 'blue';
- scoreDiv.style.fontSize = '3em';
- scoreContainer.appendChild(scoreDiv);
+ scoreDiv.style.fontSize = '2em';
+ document.body.appendChild(scoreDiv);
 
  // Set up lives
  let lives = 3;
@@ -320,18 +310,18 @@
  for (let i = 0; i < lives; i++) {
     let puffleImg = document.createElement('img');
     puffleImg.src = puffleLink;
-    puffleImg.style.height = '50px';
-    puffleImg.style.width = '50px';
+    puffleImg.style.height = '30px';
+    puffleImg.style.width = '30px';
     livesDiv.appendChild(puffleImg);
  }
  
  livesDiv.style.position = 'absolute';
  livesDiv.style.left = '28px';
- livesDiv.style.top = '60px';
+ livesDiv.style.top = '30px';
  livesDiv.style.zIndex = '1000';
  livesDiv.style.color = 'blue';
- livesDiv.style.fontSize = '3em';
- scoreContainer.appendChild(livesDiv);
+ livesDiv.style.fontSize = '2em';
+ document.body.appendChild(livesDiv);
 
  
  // Set up controls

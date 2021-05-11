@@ -123,8 +123,8 @@ class GameScene extends Scene {
         for (let i = 0; i < this.state.lives; i++) {
             let puffleImg = document.createElement('img');
             puffleImg.src = puffleLink;
-            puffleImg.style.height = '50px';
-            puffleImg.style.width = '50px';
+            puffleImg.style.height = '30px';
+            puffleImg.style.width = '30px';
             document.getElementById('lives').appendChild(puffleImg);
          }
 
