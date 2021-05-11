@@ -150,7 +150,6 @@ class GameScene extends Scene {
         const random = Math.round(Math.random() * 1000) % 150;
 
         this.state.score++;
-        this.state.selected_penguin = document.getElementById('penguins').value;
         document.getElementById('score').innerHTML = 'Score: ' + String(this.state.score);
         document.getElementById('lives').innerHTML = 'Lives: ';
         for (let i = 0; i < this.state.lives; i++) {
