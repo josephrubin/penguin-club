@@ -23,10 +23,11 @@ class Penguin extends THREE.Group {
         const loader = new GLTFLoader();
 
         this.name = 'penguin';
-        loader.load('model/penguin/model.gltf', (gltf) => {
+        loader.load('model/blue_penguin/bluefixd.gltf', (gltf) => {
             // Turn the model away from the camera.
             gltf.scene.rotateY(Math.PI)
-
+            // Blue penguin:
+            // gltf.scene.scale.set(0.2, 0.2, 0.2);
             this.add(gltf.scene);
         });
 
@@ -85,6 +86,7 @@ class Penguin extends THREE.Group {
             this.velocity.y = 0;
             this.onFloor = true;
         }
+
     }
 }
 
