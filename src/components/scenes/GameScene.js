@@ -22,6 +22,7 @@ class GameScene extends Scene {
             updateList: [],
             tiles: [],
 
+            selected_penguin: 'black_penguin',
             penguin: null,
             keys: {
                 ArrowLeft: false,
@@ -115,6 +116,7 @@ class GameScene extends Scene {
         const random = Math.round(Math.random() * 1000) % 150;
 
         this.state.score++;
+        this.state.selected_penguin = document.getElementById('penguins').value;
         document.getElementById('score').innerHTML = 'Score: ' + String(this.state.score);
         document.getElementById('lives').innerHTML = 'Lives: ';
         for (let i = 0; i < this.state.lives; i++) {
@@ -196,10 +198,9 @@ class GameScene extends Scene {
         //     this.terrainTwo = new Terrain();
         //     this.terrainTwo.position.z -= this.terrainOne.width;
         // }
+        // console.log(window.selected);
         if (this.state.gameOver) {
             window.gameShouldRun = false;
-            console.log(this.state.speed);
-            console.log("gameOver");
             let headID = document.getElementsByTagName('head')[0];
             let link = document.createElement("link");
             link.type = 'text/css';
