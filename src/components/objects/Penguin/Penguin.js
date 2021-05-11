@@ -44,9 +44,31 @@ class Penguin extends THREE.Group {
     update(timeStamp, scene) {
         // Handle key inputs.
         if (scene.state.keys["ArrowLeft"]) {
+            // Add sledding sound effect
+            const listener = new THREE.AudioListener();
+            // camera.add( listener );
+            const sound = new THREE.Audio( listener );
+            const audioLoader = new THREE.AudioLoader();
+            audioLoader.load( 'src/components/sounds/sliding.m4a', function( buffer ) {
+                sound.setBuffer( buffer );
+                sound.setLoop( false );
+                sound.setVolume( 0.1 );
+                sound.play();
+            });  
             this.netForce.add(new THREE.Vector3(-1, 0, 0));
         }
         if (scene.state.keys["ArrowRight"]) {
+            // Add sledding sound effect
+            const listener = new THREE.AudioListener();
+            // camera.add( listener );
+            const sound = new THREE.Audio( listener );
+            const audioLoader = new THREE.AudioLoader();
+            audioLoader.load( 'src/components/sounds/sliding.m4a', function( buffer ) {
+                sound.setBuffer( buffer );
+                sound.setLoop( false );
+                sound.setVolume( 0.1 );
+                sound.play();
+            });  
             this.netForce.add(new THREE.Vector3(1, 0, 0));
         }
 

@@ -10,6 +10,7 @@
  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
  import { GameScene } from 'scenes';
  import puffleLink from './components/scenes/puffle.png';
+ import * as THREE from 'three';
 
  //----
      let gameScene;
@@ -60,7 +61,7 @@
      let box = document.createElement("DIV");
      box.id = 'LoadingPage';
      box.style.height = '100vh';
-     box.weigth = '100%';
+     box.weight = '100%';
       // adapted from bootstrap docs
      let html = '<style type="text/css">' +
      'body, p, h1, h2, h3, h4, h5, a' +
@@ -136,12 +137,23 @@
  window.onload=function(){
      document.querySelectorAll(".begin-btn").forEach(function(btn){
      btn.addEventListener("click", function(){
+        // Add music
+        const listener = new THREE.AudioListener();
+        // camera.add( listener );
+        const sound = new THREE.Audio( listener );
+        const audioLoader = new THREE.AudioLoader();
+        audioLoader.load( 'src/components/sounds/sled_racing.m4a', function( buffer ) {
+            sound.setBuffer( buffer );
+            sound.setLoop( true );
+            sound.setVolume( 0.5 );
+            sound.play();
+        });        
          window.gameShouldRun = true;
          let loadingPage = document.getElementById('LoadingPage');
          document.body.removeChild(loadingPage);
          document.body.appendChild( VRButton.createButton( renderer ) );
          document.body.style.overflow = 'hidden'; // Fix scrolling
-         tour.start();
+         tour.start(); 
        })
        })
      }
@@ -374,18 +386,3 @@
  // const slip = new AudioObject('src/components/sounds/slip.mp3', 0, 1, false);
  // scene.add(slip);
  
- // create an AudioListener and add it to the camera
- const listener = new THREE.AudioListener();
- camera.add( listener );
- 
- // create a global audio source
- const sound = new THREE.Audio( listener );
- 
- // load a sound and set it as the Audio object's buffer
- const audioLoader = new THREE.AudioLoader();
- audioLoader.load( 'src/components/sounds/sled_racing.m4a', function( buffer ) {
-     sound.setBuffer( buffer );
-     sound.setLoop( true );
-     sound.setVolume( 0.5 );
-     sound.play();
- });
