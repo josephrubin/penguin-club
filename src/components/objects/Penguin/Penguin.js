@@ -1,3 +1,4 @@
+import { Scene } from 'three';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
@@ -22,8 +23,24 @@ class Penguin extends THREE.Group {
         // Load object
         const loader = new GLTFLoader();
 
+        // Load selected penguin from drop down menu
+        // Default penguin is the black penguin
         this.name = 'penguin';
-        loader.load('model/blue_penguin/bluefixd.gltf', (gltf) => {
+        this.path = 'model/penguins/black_penguin/model.gltf';
+
+        // if (scene.selected_penguin === 'blue_penguin') {
+        //     this.path = 'model/penguins/blue_penguin/bluefixd.gltf';
+        // }
+        // else if (scene.selected_penguin === 'green_penguin') {
+        //     this.path = 'model/penguins/green_penguin/greenfixd.gltf';
+        // }
+        // else if (scene.selected_penguin === 'pink_penguin') {
+        //     this.path = 'model/penguins/pink_penguin/penguin pink.gltf';
+        // }
+        // else {
+        //     this.path = 'model/penguins/black_penguin/model.gltf';
+        // }
+        loader.load(this.path, (gltf) => {
             // Turn the model away from the camera.
             gltf.scene.rotateY(Math.PI)
             // Blue penguin:

@@ -94,6 +94,10 @@
      '<div class="row " style="padding-left:30%; padding-right:30%"><div class="col"><span><div class="float-sm-left"><span class="keys"><</span><p class="py-3">move left</p></div><div class="float-sm-right"><span class="keys">></span><p class="py-3">move right</p></div></span></div></div>' +
      '<div class="row"><div class="col">'+
      '<br>' +
+    //  '<label for="penguins">Choose a penguin:</label>' +
+    //  '<br>' +
+    //  '<select name="penguins" id="penguins" class="select"> <option value="blue_penguin">Blue</option> <option value="pink_penguin">Pink</option> <option value="green_penguin">Green</option> <option value="black_penguin">Black</option></select>' +
+    //  '<br>' +
      '<button class="btn btn-light btn-lg begin-btn" href="#" role="button" id="begin-btn">Begin</a>' +
      '</div>' +
      '</div>' +
@@ -132,6 +136,22 @@
      }
  
  window.gameShouldRun = false;
+
+ // Create a drop down menu for the penguins
+ let penguinSelect = document.createElement('select');
+ // window.selected = 'black_penguin';
+ penguinSelect.innerHTML = 
+ '<label for="penguins">Choose a penguin:</label>' +
+ '<br>' +
+ '<select name="penguins" id="penguins" class="select"> <option value="blue_penguin">Blue</option> <option value="pink_penguin">Pink</option> <option value="green_penguin">Green</option> <option value="black_penguin">Black</option></select>' +
+ '<br>';
+ penguinSelect.id = 'penguins';
+ penguinSelect.style.position = 'absolute';
+ penguinSelect.style.left = '28px'
+ penguinSelect.style.top = '200px'
+ penguinSelect.style.zIndex = '1000';
+ penguinSelect.style.fontSize = '2em';
+ document.body.appendChild(penguinSelect);
  
  // Referenced the following:
  window.onload=function(){
@@ -149,6 +169,8 @@
             sound.play();
         });        
          window.gameShouldRun = true;
+         // window.selected = penguinSelect.value;
+         // console.log(window.selected);
          let loadingPage = document.getElementById('LoadingPage');
          document.body.removeChild(loadingPage);
          document.body.appendChild( VRButton.createButton( renderer ) );
