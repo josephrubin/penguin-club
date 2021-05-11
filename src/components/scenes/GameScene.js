@@ -25,7 +25,7 @@ class GameScene extends Scene {
             updateList: [],
             tiles: [],
 
-            selected_penguin: 'black_penguin',
+            selected_penguin: 'Green',
             penguin: null,
             keys: {
                 ArrowLeft: false,
@@ -71,7 +71,7 @@ class GameScene extends Scene {
 
         // Add meshes to scene
         const lights = new BasicLights();
-        this.state.penguin = new Penguin();
+        this.state.penguin = new Penguin('green');
         this.add(lights, plane, this.state.penguin);
 
         // Add the terrain.
@@ -88,6 +88,37 @@ class GameScene extends Scene {
 
         // Populate GUI
         // this.state.gui.add(this.state.penguin, 'rotationSpeed', -5, 5);
+
+        // Menu for changing penguin color
+        let folder = this.state.gui.addFolder('Penguin Color');
+        folder.add(this.state, 'selected_penguin', ['Blue', 'Green', 'Pink', 'Black']).name('Penguin Color').onChange(() => this.updatePenguinColor());
+        folder.open();
+    }
+
+    updatePenguinColor() {
+        const pos = this.state.penguin.position;
+        this.remove(this.state.penguin);
+        var penguin;
+        if (this.state.selected_penguin === 'Blue') {
+            penguin = new Penguin('blue');
+        }
+        else if (this.state.selected_penguin === 'Green') {
+            penguin = new Penguin('green');
+        }
+        else if (this.state.selected_penguin === 'Pink') {
+            penguin = new Penguin('pink');
+        }
+        else {
+            penguin = new Penguin('black');
+        }
+        penguin.position.set(pos.x, pos.y, pos.z);
+        this.state.penguin = penguin;
+        this.add(this.state.penguin);
+        this.addToUpdateList(this.state.penguin);
+        // else {
+        //     console.log("UPDATE PENGUIN COLOR: ELSE");
+        //     this.state.penguin = new Penguin('black');
+        // }
     }
 
     /** Pass along key events to all objects in this scene. */
