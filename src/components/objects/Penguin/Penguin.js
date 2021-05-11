@@ -19,6 +19,7 @@ class Penguin extends THREE.Group {
         });
         this.penguin = new THREE.Mesh(penguinGeometry, penguinMaterial);
 
+
         // Load object
         const loader = new GLTFLoader();
 
@@ -27,12 +28,30 @@ class Penguin extends THREE.Group {
             // Turn the model away from the camera.
             gltf.scene.rotateY(Math.PI)
             // Blue penguin:
-            // gltf.scene.scale.set(0.2, 0.2, 0.2);
+            gltf.scene.scale.set(0.2, 0.2, 0.2);
             this.add(gltf.scene);
         });
 
-        this.position.set(0, 0, 0);
+        var penguinTube = new THREE.Geometry();
+        this.penguin.updateMatrix();
+        penguinTube.merge(this.geometry, this.matrix);
 
+        // Tube
+        const tubeGeometry = new THREE.TorusGeometry( 0.8, 0.3, 16, 100 );
+        const tubeMaterial = new THREE.MeshPhongMaterial( 
+            { color: 0xf92002, 
+              specular: 0xf92002, 
+              shininess: 80} );
+        const tube = new THREE.Mesh( tubeGeometry, tubeMaterial );
+        tube.rotation.x = 1.5;
+        tube.position.set(0, 0.2, 0);
+
+        tube.updateMatrix();
+        penguinTube.merge(tube.geometry, tube.matrix);
+        var mesh = new THREE.Mesh(penguinTube, tubeMaterial);
+        this.add(mesh);
+
+        this.position.set(0, 0, 0);
         this.onFloor = true;
     }
 
