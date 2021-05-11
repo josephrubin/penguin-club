@@ -31,7 +31,7 @@ class GameScene extends Scene {
             cameraPosition: new THREE.Vector3(0, 1, 10),
             defaultSpeed: 0.3,
             speed: 0.3,
-
+            maxSpeed: 0.5,
             score: 0, 
             lives: 3
         };
@@ -130,7 +130,7 @@ class GameScene extends Scene {
             // this.add(snow);
             // this.addToUpdateList(snow);
             if (this.state.penguin.seenIce) {
-                this.state.speed -= 0.001;
+                this.state.speed -= 0.002;
                 if (this.state.speed <= this.state.defaultSpeed) {
                     this.state.penguin.seenIce = false;
                     this.state.speed = this.state.defaultSpeed;
@@ -181,11 +181,9 @@ class GameScene extends Scene {
             this.planeTexture.offset.add(new Vector2(0, this.state.speed/5));
             this.planeNormal.offset.add(new Vector2(0, this.state.speed/5));
             // Increase the speed as time passes
-            if (Math.round(timeStamp) % 20 === 0) {
-                //max the speed
-                if (this.state.speed <= 0.2){
-                    this.state.speed += 0.001;
-                }
+            if (Math.round(timeStamp) % 20 === 0 && this.state.speed <= this.state.maxSpeed) {
+                this.state.defaultSpeed += 0.001;
+                this.state.speed = this.state.defaultSpeed;
             }
         }
 
@@ -200,7 +198,7 @@ class GameScene extends Scene {
         // }
         if (this.state.gameOver) {
             window.gameShouldRun = false;
-            
+            console.log(this.state.speed);
             console.log("gameOver");
             let headID = document.getElementsByTagName('head')[0];
             let link = document.createElement("link");
