@@ -5,6 +5,10 @@ import { Terrain } from '../objects/Terrain';
 import MovingHazard from '../objects/MovingHazard/MovingHazard';
 import { Penguin, Ice, Snow, Hazard, Fish } from '../objects';
 import * as THREE from 'three';
+import puffleLink from './puffle.png';
+
+import { WebGLRenderer, PerspectiveCamera } from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 import { WebGLRenderer, PerspectiveCamera } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -31,7 +35,8 @@ class GameScene extends Scene {
             defaultSpeed: 0.3,
             speed: 0.3,
 
-            score: 0
+            score: 0, 
+            lives: 3
         };
 
         // Set background to a nice color
@@ -113,7 +118,15 @@ class GameScene extends Scene {
         const random = Math.round(Math.random() * 1000) % 150;
 
         this.state.score++;
-        document.getElementById('score').innerHTML = String(this.state.score);
+        document.getElementById('score').innerHTML = 'Score: ' + String(this.state.score);
+        document.getElementById('lives').innerHTML = 'Lives: ';
+        for (let i = 0; i < this.state.lives; i++) {
+            let puffleImg = document.createElement('img');
+            puffleImg.src = puffleLink;
+            puffleImg.style.height = '50px';
+            puffleImg.style.width = '50px';
+            document.getElementById('lives').appendChild(puffleImg);
+         }
 
         if (timeStamp < 100000) {
             // const snow = new Snow(this);

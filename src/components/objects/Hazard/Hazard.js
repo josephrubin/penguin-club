@@ -61,9 +61,21 @@ class Hazard extends THREE.Group {
         const hazardBox = new THREE.Box3().setFromObject(this);
         const penguinBox = new THREE.Box3().setFromObject(scene.state.penguin);
         const collision = hazardBox.intersectsBox(penguinBox);
-        if (collision) {
-            this.state.move = false;
-            scene.state.gameOver = true;
+        if (collision && !scene.state.gameOver) {
+            scene.state.lives--;
+            // x is a random position (left to right) on the ramp
+            if (this.name === 'tree') {
+                const x = -(Math.random() * 19);
+                this.position.set(x, this.position.y, -125);
+            }
+            else {
+                const x = (Math.random() * 19) - 9.5;
+                this.position.set(x, this.position.y, -125);
+            }
+            if (scene.state.lives === 0) {
+                this.state.move = false;
+                scene.state.gameOver = true;
+            }
         }
 
         if (this.state.move && !scene.state.gameOver) {
