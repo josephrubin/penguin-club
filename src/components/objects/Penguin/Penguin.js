@@ -11,6 +11,8 @@ class Penguin extends THREE.Group {
         this.netForce = new THREE.Vector3(0, 0, 0);
         this.velocity = new THREE.Vector3(0, 0, 0);
         this.mass = 100;
+        this.rotForce = 0;
+        this.rotVelocity = 0;
 
         this.seenIce = false;
         this.originalRotation = this.rotation;
@@ -44,7 +46,7 @@ class Penguin extends THREE.Group {
         }
         loader.load(this.path, (gltf) => {
             // Turn the model away from the camera.
-            gltf.scene.rotateY(Math.PI)
+            gltf.scene.rotateY(Math.PI);
             // Blue penguin:
             gltf.scene.scale.set(0.2, 0.2, 0.2);
             this.add(gltf.scene);
@@ -67,7 +69,7 @@ class Penguin extends THREE.Group {
               specular: color, 
               shininess: 80} );
         const tube = new THREE.Mesh( tubeGeometry, tubeMaterial );
-        tube.rotation.x = 1.5;
+        tube.rotation.x = 1.6;
         tube.position.set(0, 0.2, 0);
 
         tube.updateMatrix();
@@ -86,6 +88,9 @@ class Penguin extends THREE.Group {
     }
 
     update(timeStamp, scene) {
+        let movingLaterally = false;
+        let prevRot = this.rotation.z;
+
         // Handle key inputs.
         if (scene.state.keys["ArrowLeft"]) {
             // Add sledding sound effect
@@ -100,10 +105,9 @@ class Penguin extends THREE.Group {
                 sound.play();
             });  
             this.netForce.add(new THREE.Vector3(-1, 0, 0));
-            this.rotateZ(Math.PI / 1000);
+            this.rotForce += 0.7;
+            movingLaterally = true;
         }
-        this.rotation.set(this.originalRotation.x, this.originalRotation.y, this.originalRotation.z);
-        // this.rotateY(-Math.PI / 20);
         if (scene.state.keys["ArrowRight"]) {
             // Add sledding sound effect
             const listener = new THREE.AudioListener();
@@ -117,9 +121,10 @@ class Penguin extends THREE.Group {
                 sound.play();
             });  
             this.netForce.add(new THREE.Vector3(1, 0, 0));
-            this.rotateZ(-Math.PI / 1000);
+            this.rotForce -= 0.7;
+            movingLaterally = true;
         }
-        this.rotation.set(this.originalRotation.x, this.originalRotation.y, this.originalRotation.z);
+        //this.rotation.set(this.originalRotation.x, this.originalRotation.y, this.originalRotation.z);
         // Friction - opposes movement.
         this.velocity.multiplyScalar(0.97);
 
@@ -133,6 +138,30 @@ class Penguin extends THREE.Group {
         this.velocity.add(acceleration);
         this.position.add(this.velocity);
         this.netForce.set(0, 0, 0);
+
+        this.rotVelocity += this.rotForce / this.mass;
+        this.rotation.z += this.rotVelocity;
+        this.rotForce = 0;
+
+        // Limit rotation.
+        if (this.rotation.z > 0.3) {
+            this.rotation.z = 0.3;
+            this.rotVelocity = 0;
+        }
+        if (this.rotation.z < -0.3) {
+            this.rotation.z = -0.3;
+            this.rotVelocity = 0;
+        }
+        // Rotate back to neutral;
+        if (!movingLaterally) {
+            this.rotForce += -this.rotation.z;
+            // Remove rotation oscillations.
+            if (this.rotation.z * prevRot < 0) {
+                this.rotForce = 0;
+                this.rotVelocity = 0;
+                this.rotation.z = 0;
+            }
+        }
 
         // Collisions.
         const leftBoundary = -9.5;
