@@ -28,10 +28,6 @@ class Hazard extends THREE.Group {
         });
         const x = (Math.random() * 19) - 9.5;
         this.position.set(x, 0, -150);
-        // console.log("rotation");
-        // console.log(model.rotation);
-        // model.rotation.y = 1;
-        // return model;
     }
 
     generateTree(loader) {
@@ -63,15 +59,6 @@ class Hazard extends THREE.Group {
         if (random <= 0.33) this.generateLog(loader);
         else if (random <= 0.67) this.generateTree(loader);
         else this.generateRock(loader);
-
-        // var box = new THREE.Box3().setFromObject(this);
-        // box.center( this.position ); // this re-sets the mesh position
-        // this.position.multiplyScalar( - 1 );
-        // var pivot = new THREE.Group();
-        // // scene.add( pivot );
-        // pivot.add( this );
-        // this.state.pivot = pivot;
-        // Add self to parent's update list
         parent.addToUpdateList(this);
     }
 
@@ -81,17 +68,10 @@ class Hazard extends THREE.Group {
         const hazardBox = new THREE.Box3().setFromObject(this);
         const penguinBox = new THREE.Box3().setFromObject(scene.state.penguin);
         const collision = hazardBox.intersectsBox(penguinBox);
-        // this.rotation._x += 0.1;
-        // const pos = this.position;
-        // this.rotation.set(0, Math.PI / 100, 0);
-        // this.position.set(pos.x, pos.y, pos.z);
-        // this.state.pivot.rotation.y += Math.PI / 10;
-        // const bbox = new THREE.Box3().setFromObject( this );
-        // const offset = new THREE.Vector3();
-        // bbox.getCenter(offset).negate();
-        // this.position.set(offset.x, offset.y, offset.z);
+        if (this.state.hit) this.translateX(-1);
         if (collision && !scene.state.gameOver) {     
             if (!this.state.hit) {
+                this.rotateY(Math.PI);
                 const listener = new THREE.AudioListener();
                 // camera.add( listener );
                 const sound = new THREE.Audio( listener );
