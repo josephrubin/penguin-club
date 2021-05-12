@@ -47,7 +47,7 @@ class GameScene extends Scene {
         this.background = new Color(0x7ec0ee);
         
         // Create the ramp plane
-        const geo = new PlaneGeometry(20, 550);
+        const geo = new PlaneGeometry(20, 1000);
         //const planeMaterial = new MeshBasicMaterial({color: 0xffffff});
 
         this.planeTexture = new TextureLoader().load(
@@ -78,11 +78,18 @@ class GameScene extends Scene {
         this.add(lights, plane, this.state.penguin);
 
         // Add the terrain.
-        this.terrainOne = new Terrain();
-        // Another terrain is always in front, and we keep generating more as the terrain
-        // move off screen behind us.
-        this.terrainTwo = new Terrain();
-        this.terrainTwo.position.z -= this.terrainOne.width;
+        this.terrainCount = 5;
+        this.terrain = new Array(this.terrainCount);
+        for (let i = 0; i < this.terrainCount; i++) {
+            this.terrain[i] = new Terrain();
+            if (i == 0) {
+                this.terrain[i].position.z = 0;
+            }
+            else {
+                this.terrain[i].position.z = this.terrain[i - 1].position.z - this.terrain[i - 1].length;
+            }
+            this.add(this.terrain[i]);
+        }
         
         this.add(this.terrainOne, this.terrainTwo);
 
@@ -160,7 +167,7 @@ class GameScene extends Scene {
          }
 
         if (this.state.spin) {
-            this.state.penguin.rotateY(Math.PI/50);
+            this.state.penguin.penguinObj.rotateY(Math.PI/50);
         }
 
         if (timeStamp < 100000) {
@@ -226,15 +233,37 @@ class GameScene extends Scene {
         }
 
         // Move the terrain.
-        // this.terrainOne.position.z += 1;
-        // this.terrainTwo.position.z += 1;
-        // if (this.terrainOne.position.z >= this.terrainOne.width) {
-        //     console.log('new trr')
-        //     this.terrainOne = this.terrainTwo;
-        //     this.terrainTwo = new Terrain();
-        //     this.terrainTwo.position.z -= this.terrainOne.width;
-        // }
-        // console.log(window.selected);
+        for (let i = 0; i < this.terrain.length; i++) {
+            this.terrain[i].position.z += 0.2;
+        }
+        // If the nearest terrain goes off screen....
+        if (this.terrain[0].position.z > this.terrain[0].length) {
+            // Remove the nearest terrain.
+            this.remove(this.terrain[0]);
+
+            // Create a new terrain.
+            const terrainNew = new Terrain();
+
+            // Place it at the back.
+            terrainNew.position.z = this.terrain[this.terrain.length - 1].position.z - this.terrain[this.terrain.length - 1].length;
+            
+            // Shift the array around the place the nw terrain at the back.
+            this.terrain = this.terrain.slice(1);
+            this.terrain.push(terrainNew);
+
+            // Add back the new terrain.
+            this.add(terrainNew);
+        }
+        /*
+        if (this.terrainOne.position.z >= this.terrainOne.length) {
+            console.log("done")
+            this.remove(this.terrainOne);
+            this.terrainOne = this.terrainTwo;
+            this.terrainTwo = new Terrain();
+            this.terrainTwo.position.z -= this.terrainOne.length;
+            this.add(this.terrainTwo);
+        }*/
+
         if (this.state.gameOver) {
             window.gameShouldRun = false;
             let headID = document.getElementsByTagName('head')[0];
@@ -246,7 +275,7 @@ class GameScene extends Scene {
 
             let box = document.createElement("DIV");
             box.id = 'LoadingPage';
-            box.height = '100%';
+            box.height = '100vh';
             box.weigth = '100%';
              // adapted from bootstrap docs
             let html = '<style type="text/css">' +
@@ -261,7 +290,7 @@ class GameScene extends Scene {
             '@media only screen and (min-width: 768px) { .p-large, { font-size: 1.4rem; } .display-4,.display-5 { font-size: 1.7rem; }}' +
             '@media only screen and (min-width: 992px) { .p-large { font-size: 1.8rem; } .display-4,.display-5 { font-size: 2.6rem; } } }' +
             '</style>' +
-            '<div class="container-fluid box text-center" style="background: linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 100%);">' +
+            '<div class="container-fluid box text-center" style="height: 100vh; background: linear-gradient(90deg, rgba(255,0,0,1) 0%, rgba(255,255,255,1) 100%);">' +
             '<div class="text container p-5" style="color: white;">' +
             '<div class="jumbotron">' +
             '<h1 class="display-5 pt-2" style="text-shadow: 2px 2px 4px black;" >GAME OVER</h1>' +
@@ -269,7 +298,7 @@ class GameScene extends Scene {
             '<hr class="my-4">' +
             '<p class="lead" style="text-shadow: 3px 3px 6px black;"></p>' +
             '<hr class="my-4">' +
-            '<div class="row"><div class="col"><span class="keys">^</span><p class="py-3">jump up</p></div></div>' +
+            '<div class="row"><div class="col"><span class="keys">SPACE</span><p class="py-3">jump up</p></div></div>' +
             '<div class="row " style="padding-left:30%; padding-right:30%"><div class="col"><span><div class="float-sm-left"><span class="keys"><</span><p class="py-3">move left</p></div><div class="float-sm-right"><span class="keys">></span><p class="py-3">move right</p></div></span></div></div>' +
             '<div class="row"><div class="col">'+
             '<br>' +
@@ -293,21 +322,26 @@ class GameScene extends Scene {
 
             let allKeys = document.getElementsByClassName("keys");
             for (let i = 0; i < allKeys.length; i++){
-            allKeys[i].style.display = 'inline-block';
-            allKeys[i].style.width = '35px';
-            allKeys[i].style.height = '35px';
-            allKeys[i].style.border = '1px solid white';
-            allKeys[i].style.borderRadius = '2px 2px 2px 2px';
-            allKeys[i].style.moxBorderRadius = '2px 2px 2px 2px';
-            allKeys[i].style.moxBoxSizing = 'border-box !important';
-            allKeys[i].style.webkitBoxSizing = 'border-box !important';
-            allKeys[i].style.boxSizing = 'border-box !important';
-            allKeys[i].style.webkitBoxShadow = '0px 3px 0px -2px rgba(255,255,255,1), 0px 2px 0px 0px white';
-            allKeys[i].style.moxBoxShadow = '0px 3px 0px -2px rgba(255,255,255,1), 0px 2px 0px 0px white';
-            allKeys[i].style.boxShadow = '0px 3px 0px -2px rgba(255,255,255,1), 0px 2px 0px 0px white';
-            allKeys[i].style.cursor = 'pointer';
-            allKeys[i].style.marginLeft = '15px';
-            allKeys[i].style.marginRight = '15px';
+                allKeys[i].style.display = 'inline-block';
+                allKeys[i].style.width = '35px';
+                if (i == 0) {
+                    allKeys[i].style.width = '200px';
+                }
+                else {
+                    allKeys[i].style.width = '35px';
+                }
+                allKeys[i].style.border = '1px solid white';
+                allKeys[i].style.borderRadius = '2px 2px 2px 2px';
+                allKeys[i].style.moxBorderRadius = '2px 2px 2px 2px';
+                allKeys[i].style.moxBoxSizing = 'border-box !important';
+                allKeys[i].style.webkitBoxSizing = 'border-box !important';
+                allKeys[i].style.boxSizing = 'border-box !important';
+                allKeys[i].style.webkitBoxShadow = '0px 3px 0px -2px rgba(255,255,255,1), 0px 2px 0px 0px white';
+                allKeys[i].style.moxBoxShadow = '0px 3px 0px -2px rgba(255,255,255,1), 0px 2px 0px 0px white';
+                allKeys[i].style.boxShadow = '0px 3px 0px -2px rgba(255,255,255,1), 0px 2px 0px 0px white';
+                allKeys[i].style.cursor = 'pointer';
+                allKeys[i].style.marginLeft = '15px';
+                allKeys[i].style.marginRight = '15px';
             }
 
             let btn = document.getElementById('begin-btn');
