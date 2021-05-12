@@ -23,6 +23,11 @@ class Penguin extends THREE.Group {
         });
         this.penguin = new THREE.Mesh(penguinGeometry, penguinMaterial);
 
+        this.trailParticles = [];
+        this.trailParticleCount = 25;
+        for (let i = 0; i < this.trailParticleCount; i++) {
+            this.trailParticles.push(null);
+        }
 
         // Load object
         const loader = new GLTFLoader();
@@ -185,6 +190,38 @@ class Penguin extends THREE.Group {
             this.onFloor = true;
         }
 
+        // Trail particles.
+        this.trailParticles.forEach((particle, i) => {
+            if (particle == null && this.onFloor && movingLaterally) {
+                // Create new particle.
+                const particleGeo = new THREE.SphereBufferGeometry(0.05);
+                const particleMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x000000,
+                    side: THREE.DoubleSide
+                });
+                const particleMesh = new THREE.Mesh(particleGeo, particleMaterial);
+                particleMesh.position.set(this.position.x + (Math.random() - 0.5) * 1.2, -0.2, 2 + Math.random() - 0.5);
+                particleMesh.rotateX(Math.PI / 2);
+                scene.add(particleMesh);
+
+                this.trailParticles[i] = {
+                    life: 40 * Math.random(),
+                    mesh: particleMesh
+                }
+            }
+            else if (particle != null) {
+                const mesh = particle.mesh;
+                // Move the particles.
+                mesh.position.set(mesh.position.x, mesh.position.y + 0.08 + Math.random() / 10, mesh.position.z + 0.25);
+                particle.life -= 1;
+                const gray = 1 - (particle.life / 20);
+                mesh.material.color.setRGB(gray, gray, gray);
+                if (particle.life <= 0) {
+                    scene.remove(mesh);
+                    this.trailParticles[i] = null;
+                }
+            }
+        })
     }
 }
 
