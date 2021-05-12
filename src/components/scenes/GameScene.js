@@ -1,15 +1,12 @@
 import * as Dat from 'dat.gui';
-import { Scene, Color, PlaneGeometry, MeshStandardMaterial, Mesh, Vector2, Vector3, Texture, TextureLoader, RepeatWrapping, AudioObject, TextGeometry } from 'three';
+import { Scene, Color, PlaneGeometry, MeshStandardMaterial, Mesh, Vector2, Vector3, TextureLoader, RepeatWrapping } from 'three';
 import { BasicLights } from 'lights';
 import { Terrain } from '../objects/Terrain';
 import MovingHazard from '../objects/MovingHazard/MovingHazard';
 import { Penguin, Ice, Snow, Hazard, Fish } from '../objects';
 import * as THREE from 'three';
 import puffleLink from './puffle.png';
-
-// import { WebGLRenderer, PerspectiveCamera } from 'three';
-// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-
+import rainbowPuffleLink from './rainbow_puffle.png';
 import { WebGLRenderer, PerspectiveCamera } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
@@ -39,6 +36,7 @@ class GameScene extends Scene {
             maxSpeed: 0.5,
             score: 0, 
             lives: 3, 
+            powers: 1,
             flip: this.flip.bind(this),
             spin: false
         };
@@ -123,6 +121,28 @@ class GameScene extends Scene {
         this.addToUpdateList(this.state.penguin);
     }
 
+    // Update score, lives, and powers. If you press the key p, then use a power.
+    updateStats() {
+        this.state.score++;
+        document.getElementById('score').innerHTML = 'Score: ' + String(this.state.score);
+        document.getElementById('lives').innerHTML = 'Lives: ';
+        for (let i = 0; i < this.state.lives; i++) {
+            let puffleImg = document.createElement('img');
+            puffleImg.src = puffleLink;
+            puffleImg.style.height = '30px';
+            puffleImg.style.width = '30px';
+            document.getElementById('lives').appendChild(puffleImg);
+         }
+        document.getElementById('power').innerHTML = 'Powers: ';
+        for (let i = 0; i < this.state.powers; i++) {
+            let rainbowImg = document.createElement('img');
+            rainbowImg.src = rainbowPuffleLink;
+            rainbowImg.style.height = '30px';
+            rainbowImg.style.width = '30px';
+            document.getElementById('power').appendChild(rainbowImg);
+        }
+    }
+
     flip() {
         this.state.penguin.rotateY(Math.PI);
     }
@@ -155,17 +175,9 @@ class GameScene extends Scene {
         this.rotation.y = (rotationSpeed * timeStamp) / 10000;
         const random = Math.round(Math.random() * 1000) % 150;
 
-        this.state.score++;
-        document.getElementById('score').innerHTML = 'Score: ' + String(this.state.score);
-        document.getElementById('lives').innerHTML = 'Lives: ';
-        for (let i = 0; i < this.state.lives; i++) {
-            let puffleImg = document.createElement('img');
-            puffleImg.src = puffleLink;
-            puffleImg.style.height = '30px';
-            puffleImg.style.width = '30px';
-            document.getElementById('lives').appendChild(puffleImg);
-         }
+        this.updateStats(event);
 
+        // Rotate penguin
         if (this.state.spin) {
             this.state.penguin.penguinObj.rotateY(Math.PI/50);
         }
@@ -174,6 +186,8 @@ class GameScene extends Scene {
             // const snow = new Snow(this);
             // this.add(snow);
             // this.addToUpdateList(snow);
+            
+            // Increase speed if the penguin is sliding on ice
             if (this.state.penguin.seenIce) {
                 this.state.speed -= 0.002;
                 if (this.state.speed <= this.state.defaultSpeed) {
@@ -184,9 +198,12 @@ class GameScene extends Scene {
             if (!this.state.gameOver) {
                 // Randomly add hazards to the scene
                 if (random === 0) {
+                    // Add fish
                     const fish = new Fish(this);
                     this.addToUpdateList(fish);
                     this.add(fish);
+
+                    // Add ice
                     const select = Math.random();
                     if (select <= 0.2) {
                         const ice = new Ice(this);
@@ -194,6 +211,7 @@ class GameScene extends Scene {
                         this.add(ice);
                     }
 
+                    // Add either a rock, log, or tree
                     else if (select <= 0.8) {
                         const hazard = new Hazard(this);
                         this.addToUpdateList(hazard);
