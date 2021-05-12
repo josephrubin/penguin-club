@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 class Penguin extends THREE.Group {
-    constructor(color) {
+    constructor(penguinColor, tubeColor) {
         // Call parent Group() constructor
         super();
 
@@ -13,6 +13,7 @@ class Penguin extends THREE.Group {
         this.mass = 100;
 
         this.seenIce = false;
+        this.originalRotation = this.rotation;
 
         const penguinGeometry = new THREE.BoxGeometry(1, 1, 1);
         const penguinMaterial = new THREE.MeshPhongMaterial({
@@ -29,13 +30,13 @@ class Penguin extends THREE.Group {
         this.name = 'penguin';
         // this.path = 'model/penguins/black_penguin/model.gltf';
 
-        if (color === 'blue') {
+        if (penguinColor === 'Blue') {
             this.path = 'model/penguins/blue_penguin/bluefixd.gltf';
         }
-        else if (color === 'green') {
+        else if (penguinColor === 'Green') {
             this.path = 'model/penguins/green_penguin/greenfixd.gltf';
         }
-        else if (color === 'pink') {
+        else if (penguinColor === 'Pink') {
             this.path = 'model/penguins/pink_penguin/penguin pink.gltf';
         }
         else {
@@ -54,10 +55,16 @@ class Penguin extends THREE.Group {
         penguinTube.merge(this.geometry, this.matrix);
 
         // Tube
+        var color;
+        if (tubeColor === 'Red') color = 0xf92002;
+        else if (tubeColor === 'Blue') color = 0x022ff9
+        else if (tubeColor === 'Green') color = 0x2cda02
+        else color = 0x000000;
+
         const tubeGeometry = new THREE.TorusGeometry( 0.8, 0.3, 16, 100 );
         const tubeMaterial = new THREE.MeshPhongMaterial( 
-            { color: 0xf92002, 
-              specular: 0xf92002, 
+            { color: color, 
+              specular: color, 
               shininess: 80} );
         const tube = new THREE.Mesh( tubeGeometry, tubeMaterial );
         tube.rotation.x = 1.5;
@@ -93,7 +100,10 @@ class Penguin extends THREE.Group {
                 sound.play();
             });  
             this.netForce.add(new THREE.Vector3(-1, 0, 0));
+            this.rotateZ(Math.PI / 1000);
         }
+        this.rotation.set(this.originalRotation.x, this.originalRotation.y, this.originalRotation.z);
+        // this.rotateY(-Math.PI / 20);
         if (scene.state.keys["ArrowRight"]) {
             // Add sledding sound effect
             const listener = new THREE.AudioListener();
@@ -107,8 +117,9 @@ class Penguin extends THREE.Group {
                 sound.play();
             });  
             this.netForce.add(new THREE.Vector3(1, 0, 0));
+            this.rotateZ(-Math.PI / 1000);
         }
-
+        this.rotation.set(this.originalRotation.x, this.originalRotation.y, this.originalRotation.z);
         // Friction - opposes movement.
         this.velocity.multiplyScalar(0.97);
 

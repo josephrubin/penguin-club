@@ -26,6 +26,7 @@ class GameScene extends Scene {
             tiles: [],
 
             selected_penguin: 'Green',
+            tube_color: 'Red',
             penguin: null,
             keys: {
                 ArrowLeft: false,
@@ -37,7 +38,9 @@ class GameScene extends Scene {
             speed: 0.3,
             maxSpeed: 0.5,
             score: 0, 
-            lives: 3
+            lives: 3, 
+            flip: this.flip.bind(this),
+            spin: false
         };
 
         // Set background to a nice color
@@ -71,7 +74,7 @@ class GameScene extends Scene {
 
         // Add meshes to scene
         const lights = new BasicLights();
-        this.state.penguin = new Penguin('green');
+        this.state.penguin = new Penguin(this.state.selected_penguin, this.state.tube_color);
         this.add(lights, plane, this.state.penguin);
 
         // Add the terrain.
@@ -90,35 +93,41 @@ class GameScene extends Scene {
         // this.state.gui.add(this.state.penguin, 'rotationSpeed', -5, 5);
 
         // Menu for changing penguin color
-        let folder = this.state.gui.addFolder('Penguin Color');
-        folder.add(this.state, 'selected_penguin', ['Blue', 'Green', 'Pink', 'Black']).name('Penguin Color').onChange(() => this.updatePenguinColor());
+        let penguinFolder = this.state.gui.addFolder('Penguin Color');
+        penguinFolder.add(this.state, 'selected_penguin', ['Blue', 'Green', 'Pink', 'Black']).name('Penguin Color').onChange(() => this.updatePenguinColor());
+        penguinFolder.open();
+
+        // Menu for changing tube color
+        let folder = this.state.gui.addFolder('Tube Color');
+        folder.add(this.state, 'tube_color', ['Red', 'Green', 'Blue', 'Black']).name('Tube Color').onChange(() => this.updateTubeColor());
         folder.open();
+
+        this.state.gui.add(this.state, 'flip');
+        this.state.gui.add(this.state, 'spin');
     }
 
     updatePenguinColor() {
         const pos = this.state.penguin.position;
         this.remove(this.state.penguin);
-        var penguin;
-        if (this.state.selected_penguin === 'Blue') {
-            penguin = new Penguin('blue');
-        }
-        else if (this.state.selected_penguin === 'Green') {
-            penguin = new Penguin('green');
-        }
-        else if (this.state.selected_penguin === 'Pink') {
-            penguin = new Penguin('pink');
-        }
-        else {
-            penguin = new Penguin('black');
-        }
+        const penguin = new Penguin(this.state.selected_penguin, this.state.tube_color);
         penguin.position.set(pos.x, pos.y, pos.z);
         this.state.penguin = penguin;
         this.add(this.state.penguin);
         this.addToUpdateList(this.state.penguin);
-        // else {
-        //     console.log("UPDATE PENGUIN COLOR: ELSE");
-        //     this.state.penguin = new Penguin('black');
-        // }
+    }
+
+    updateTubeColor() {
+        const pos = this.state.penguin.position;
+        this.remove(this.state.penguin);
+        const penguin = new Penguin(this.state.selected_penguin, this.state.tube_color);
+        penguin.position.set(pos.x, pos.y, pos.z);
+        this.state.penguin = penguin;
+        this.add(this.state.penguin);
+        this.addToUpdateList(this.state.penguin);
+    }
+
+    flip() {
+        this.state.penguin.rotateY(Math.PI);
     }
 
     /** Pass along key events to all objects in this scene. */
@@ -159,6 +168,10 @@ class GameScene extends Scene {
             puffleImg.style.width = '30px';
             document.getElementById('lives').appendChild(puffleImg);
          }
+
+        if (this.state.spin) {
+            this.state.penguin.rotateY(Math.PI/50);
+        }
 
         if (timeStamp < 100000) {
             // const snow = new Snow(this);
