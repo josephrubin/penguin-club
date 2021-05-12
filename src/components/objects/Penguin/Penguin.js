@@ -1,5 +1,7 @@
 import { Scene } from 'three';
 import * as THREE from 'three';
+import { TextureLoader } from 'three';
+
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 class Penguin extends THREE.Group {
@@ -64,16 +66,26 @@ class Penguin extends THREE.Group {
 
         // Tube
         var color;
-        if (tubeColor === 'Red') color = 0xf92002;
+        if (tubeColor === 'Red' || tubeColor === 'rainbow') color = 0xf92002;
         else if (tubeColor === 'Blue') color = 0x022ff9
         else if (tubeColor === 'Green') color = 0x2cda02
         else color = 0x000000;
 
+        const rainbow = new TextureLoader().load(
+            'textures/rainbow.jpeg'
+        );
+
         const tubeGeometry = new THREE.TorusGeometry( 0.8, 0.3, 16, 100 );
-        const tubeMaterial = new THREE.MeshPhongMaterial( 
+        let tubeMaterial = new THREE.MeshPhongMaterial( 
             { color: color, 
               specular: color, 
               shininess: 80} );
+        if (tubeColor === 'rainbow') {
+            tubeMaterial = new THREE.MeshPhongMaterial( 
+                {
+                  map: rainbow } 
+                );
+        }
         const tube = new THREE.Mesh( tubeGeometry, tubeMaterial );
         tube.rotation.x = 1.6;
         tube.position.set(0, 0.2, 0);
@@ -215,7 +227,7 @@ class Penguin extends THREE.Group {
                 // Move the particles.
                 mesh.position.set(mesh.position.x, mesh.position.y + 0.08 + Math.random() / 10, mesh.position.z + 0.25);
                 particle.life -= 1;
-                const gray = 1 - (particle.life / 20);
+                const gray = 1 - (particle.life / 50);
                 mesh.material.color.setRGB(gray, gray, gray);
                 if (particle.life <= 0) {
                     scene.remove(mesh);

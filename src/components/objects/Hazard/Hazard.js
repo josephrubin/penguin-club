@@ -68,7 +68,10 @@ class Hazard extends THREE.Group {
         const hazardBox = new THREE.Box3().setFromObject(this);
         const penguinBox = new THREE.Box3().setFromObject(scene.state.penguin);
         const collision = hazardBox.intersectsBox(penguinBox);
-        if (this.state.hit) this.translateX(-1);
+        if (this.state.hit) {
+            if (this.position.x < scene.state.penguin.position.x) this.translateX(1);
+            else this.translateX(-1);
+        }
         if (collision && !scene.state.gameOver) {     
             if (!this.state.hit) {
                 this.rotateY(Math.PI);
@@ -81,8 +84,8 @@ class Hazard extends THREE.Group {
                     sound.setLoop( false );
                     sound.setVolume( 0.5 );
                     sound.play();
-                });   
-                scene.state.lives--;
+                });
+                if (scene.state.boostTime === 0) scene.state.lives--;
                 this.state.hit = true;
             }
             // x is a random position (left to right) on the ramp

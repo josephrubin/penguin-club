@@ -61,10 +61,10 @@ class Terrain extends Group {
             // Simple flat shading for now, we can make more creative later.
             const averageY = (vertexA.y + vertexB.y + vertexC.y) / 3;
             const factor = (averageY + 12) / 5;
-            face.color.setRGB(factor, factor, factor);
+            face.color.setRGB((163/255) * factor, (194/255) * factor, (217/255) * factor);
+            // face.color.setRGB(factor, factor, factor);
         });
         this.geometry.colorsNeedUpdate = true;
-
         this.add(this.mesh);
     }
 

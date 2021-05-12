@@ -10,6 +10,7 @@
  import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
  import { GameScene } from 'scenes';
  import puffleLink from './components/scenes/puffle.png';
+ import rainbowPuffleLink from './components/scenes/rainbow_puffle.png';
  import * as THREE from 'three';
 
     let gameScene;
@@ -192,6 +193,26 @@ livesDiv.style.zIndex = '1000';
 livesDiv.style.color = 'blue';
 livesDiv.style.fontSize = '2em';
 document.body.appendChild(livesDiv);
+
+// Set up invincibilities
+let powers = 3;
+let powerDiv = document.createElement('div');
+powerDiv.id = 'power';
+powerDiv.innerHTML = 'Powers:';
+for (let i = 0; i < powers; i++) {
+    let rainbowImg = document.createElement('img');
+    rainbowImg.src = rainbowPuffleLink;
+    rainbowImg.style.height = '30px';
+    rainbowImg.style.width = '30px';
+    powerDiv.appendChild(rainbowImg);
+}
+powerDiv.style.position = 'absolute';
+powerDiv.style.left = '28px';
+powerDiv.style.top = '60px';
+powerDiv.style.zIndex = '1000';
+powerDiv.style.color = 'blue';
+powerDiv.style.fontSize = '2em';
+document.body.appendChild(powerDiv);
 
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {

@@ -3,9 +3,11 @@ import { Scene, Color, PlaneGeometry, MeshStandardMaterial, Mesh, Vector2, Vecto
 import { BasicLights } from 'lights';
 import { Terrain } from '../objects/Terrain';
 import MovingHazard from '../objects/MovingHazard/MovingHazard';
-import { Penguin, Ice, Snow, Hazard, Fish } from '../objects';
+import { Penguin, Ice, Snow, Hazard, Fish, Squid } from '../objects';
 import * as THREE from 'three';
 import puffleLink from './puffle.png';
+import rainbowPuffleLink from './rainbow_puffle.png';
+
 
 // import { WebGLRenderer, PerspectiveCamera } from 'three';
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -40,7 +42,10 @@ class GameScene extends Scene {
             score: 0, 
             lives: 3, 
             flip: this.flip.bind(this),
-            spin: false
+            boost: this.boost.bind(this),
+            spin: false, 
+            boostTime: 0,
+            powers: 0
         };
 
         // Set background to a nice color
@@ -111,6 +116,8 @@ class GameScene extends Scene {
 
         this.state.gui.add(this.state, 'flip');
         this.state.gui.add(this.state, 'spin');
+        this.state.gui.add(this.state, 'boost');
+
     }
 
     updatePenguinColor() {
@@ -133,8 +140,45 @@ class GameScene extends Scene {
         this.addToUpdateList(this.state.penguin);
     }
 
+    // Update score, lives, and powers. If you press the key p, then use a power.
+    updateStats() {
+        this.state.score++;
+        document.getElementById('score').innerHTML = 'Score: ' + String(this.state.score);
+        document.getElementById('lives').innerHTML = 'Lives: ';
+        for (let i = 0; i < this.state.lives; i++) {
+            let puffleImg = document.createElement('img');
+            puffleImg.src = puffleLink;
+            puffleImg.style.height = '30px';
+            puffleImg.style.width = '30px';
+            document.getElementById('lives').appendChild(puffleImg);
+         }
+        document.getElementById('power').innerHTML = 'Powers: ';
+        for (let i = 0; i < this.state.powers; i++) {
+            let rainbowImg = document.createElement('img');
+            rainbowImg.src = rainbowPuffleLink;
+            rainbowImg.style.height = '30px';
+            rainbowImg.style.width = '30px';
+            document.getElementById('power').appendChild(rainbowImg);
+        }
+    }
+
     flip() {
         this.state.penguin.rotateY(Math.PI);
+    }
+
+    boost() {
+        if (this.state.powers > 0) {
+            this.state.boostTime += 300;
+            this.state.powers --;
+            // Make tube rainbow-colored.
+            const pos = this.state.penguin.position;
+            this.remove(this.state.penguin);
+            const penguin = new Penguin(this.state.selected_penguin, 'rainbow');
+            penguin.position.set(pos.x, pos.y, pos.z);
+            this.state.penguin = penguin;
+            this.add(this.state.penguin);
+            this.addToUpdateList(this.state.penguin);
+        }
     }
 
     /** Pass along key events to all objects in this scene. */
@@ -165,25 +209,22 @@ class GameScene extends Scene {
         this.rotation.y = (rotationSpeed * timeStamp) / 10000;
         const random = Math.round(Math.random() * 1000) % 150;
 
-        this.state.score++;
-        document.getElementById('score').innerHTML = 'Score: ' + String(this.state.score);
-        document.getElementById('lives').innerHTML = 'Lives: ';
-        for (let i = 0; i < this.state.lives; i++) {
-            let puffleImg = document.createElement('img');
-            puffleImg.src = puffleLink;
-            puffleImg.style.height = '30px';
-            puffleImg.style.width = '30px';
-            document.getElementById('lives').appendChild(puffleImg);
-         }
+        this.updateStats();
+
+        if (this.state.boostTime > 0) {
+            this.state.boostTime--;
+            const snow = new Snow(this);
+            this.add(snow);
+        }
+        if (this.state.boostTime === 1) {
+            this.updateTubeColor();
+        }
 
         if (this.state.spin) {
             this.state.penguin.penguinObj.rotateY(Math.PI/50);
         }
 
         if (timeStamp < 100000) {
-            // const snow = new Snow(this);
-            // this.add(snow);
-            // this.addToUpdateList(snow);
             if (this.state.penguin.seenIce) {
                 this.state.speed -= 0.002;
                 if (this.state.speed <= this.state.defaultSpeed) {
@@ -194,6 +235,12 @@ class GameScene extends Scene {
             if (!this.state.gameOver) {
                 // Randomly add hazards to the scene
                 if (random === 0) {
+                    // if (!this.state.addedSquid) {
+                    //     const squid = new Squid(this);
+                    //     this.addToUpdateList(squid);
+                    //     this.add(squid);
+                    //     this.state.addedSquid = true;
+                    // }
                     const fish = new Fish(this);
                     this.addToUpdateList(fish);
                     this.add(fish);
@@ -227,8 +274,17 @@ class GameScene extends Scene {
                         this.addToUpdateList(movingHazard);
                     }
                 }
+            } 
+        }
+        if (((timeStamp > 10000 && timeStamp < 15000) ||
+            (timeStamp > 70000 && timeStamp < 75000)) && !this.state.addedSquid) {
+            const squidRandom = Math.round(Math.random() * 1000) % 150;
+            if (squidRandom === 0) {
+                const squid = new Squid(this);
+                this.addToUpdateList(squid);
+                this.add(squid);
+                this.state.addedSquid = true;
             }
-
         }
 
         // Move the snow texture.
@@ -274,6 +330,7 @@ class GameScene extends Scene {
             this.add(this.terrainTwo);
         }*/
 
+        // End scene
         if (this.state.gameOver) {
             window.gameShouldRun = false;
             let headID = document.getElementsByTagName('head')[0];
