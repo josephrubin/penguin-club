@@ -55,6 +55,7 @@ class Penguin extends THREE.Group {
             // Blue penguin:
             gltf.scene.scale.set(0.2, 0.2, 0.2);
             this.add(gltf.scene);
+            this.penguinObj = gltf.scene;
         });
 
         var penguinTube = new THREE.Geometry();
