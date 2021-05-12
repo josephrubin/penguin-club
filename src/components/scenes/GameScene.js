@@ -98,9 +98,9 @@ class GameScene extends Scene {
         penguinFolder.open();
 
         // Menu for changing tube color
-        let folder = this.state.gui.addFolder('Tube Color');
-        folder.add(this.state, 'tube_color', ['Red', 'Green', 'Blue', 'Black']).name('Tube Color').onChange(() => this.updateTubeColor());
-        folder.open();
+        let tubeFolder = this.state.gui.addFolder('Tube Color');
+        tubeFolder.add(this.state, 'tube_color', ['Red', 'Green', 'Blue', 'Black']).name('Tube Color').onChange(() => this.updateTubePenguin());
+        tubeFolder.open();
 
         this.state.gui.add(this.state, 'flip');
         this.state.gui.add(this.state, 'spin');
@@ -108,21 +108,11 @@ class GameScene extends Scene {
 
     updatePenguinColor() {
         const pos = this.state.penguin.position;
-        this.remove(this.state.penguin);
         const penguin = new Penguin(this.state.selected_penguin, this.state.tube_color);
         penguin.position.set(pos.x, pos.y, pos.z);
-        this.state.penguin = penguin;
-        this.add(this.state.penguin);
-        this.addToUpdateList(this.state.penguin);
-    }
-
-    updateTubeColor() {
-        const pos = this.state.penguin.position;
+        this.add(penguin);
         this.remove(this.state.penguin);
-        const penguin = new Penguin(this.state.selected_penguin, this.state.tube_color);
-        penguin.position.set(pos.x, pos.y, pos.z);
         this.state.penguin = penguin;
-        this.add(this.state.penguin);
         this.addToUpdateList(this.state.penguin);
     }
 
