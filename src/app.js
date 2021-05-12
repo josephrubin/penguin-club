@@ -16,7 +16,6 @@
      let gameScene;
      let startScene;
      let endScene;
-     console.log("here");
      let clicked = true;
      // camera.position.set(0, 5, 11);
      // camera.lookAt(new Vector3(0, 0, 0));
@@ -25,8 +24,6 @@
      const camera = new PerspectiveCamera();
      const renderer = new WebGLRenderer({ antialias: true });
      // Set up camera
-     camera.position.set(6, 3, -10);
-     camera.lookAt(new Vector3(0, 0, 0));
      camera.position.set(0, 10, 25);
      camera.lookAt(new Vector3(0, 0, 0));
  
@@ -175,7 +172,7 @@
      controls.enablePan = false;
      controls.minDistance = 4;
      controls.maxDistance = 16;
-     controls.enabled = false;
+     // controls.enabled = false;
      controls.update();
  // window.onload=function(){
  //     var btn = document.getElementById('begin-btn'); 
