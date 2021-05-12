@@ -9,6 +9,12 @@ class Penguin extends THREE.Group {
         // Call parent Group() constructor
         super();
 
+        // Load the sliding sound buffer.
+        const audioLoader = new THREE.AudioLoader();
+        audioLoader.load( 'src/components/sounds/sliding.mp3', (buffer) => {
+            this.slidingBuffer = buffer;
+        });
+
         // Physics.
         this.netForce = new THREE.Vector3(0, 0, 0);
         this.velocity = new THREE.Vector3(0, 0, 0);
@@ -112,32 +118,29 @@ class Penguin extends THREE.Group {
         // Handle key inputs.
         if (scene.state.keys["ArrowLeft"]) {
             // Add sledding sound effect
-            const listener = new THREE.AudioListener();
-            // camera.add( listener );
-            const sound = new THREE.Audio( listener );
-            const audioLoader = new THREE.AudioLoader();
-            audioLoader.load( 'src/components/sounds/sliding.m4a', function( buffer ) {
-                sound.setBuffer( buffer );
+            if (this.slidingBuffer) {
+                const listener = new THREE.AudioListener();
+                const sound = new THREE.Audio( listener );
+                sound.setBuffer( this.slidingBuffer );
                 sound.setLoop( false );
                 sound.setVolume( 0.1 );
                 sound.play();
-            });  
+            }
+
             this.netForce.add(new THREE.Vector3(-1, 0, 0));
             this.rotForce += 0.7;
             movingLaterally = true;
         }
         if (scene.state.keys["ArrowRight"]) {
-            // Add sledding sound effect
-            const listener = new THREE.AudioListener();
-            // camera.add( listener );
-            const sound = new THREE.Audio( listener );
-            const audioLoader = new THREE.AudioLoader();
-            audioLoader.load( 'src/components/sounds/sliding.m4a', function( buffer ) {
-                sound.setBuffer( buffer );
+            if (this.slidingBuffer) {
+                const listener = new THREE.AudioListener();
+                const sound = new THREE.Audio( listener );
+                sound.setBuffer( this.slidingBuffer );
                 sound.setLoop( false );
                 sound.setVolume( 0.1 );
                 sound.play();
-            });  
+            }
+
             this.netForce.add(new THREE.Vector3(1, 0, 0));
             this.rotForce -= 0.7;
             movingLaterally = true;
