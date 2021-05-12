@@ -47,7 +47,7 @@ class GameScene extends Scene {
         this.background = new Color(0x7ec0ee);
         
         // Create the ramp plane
-        const geo = new PlaneGeometry(20, 550);
+        const geo = new PlaneGeometry(20, 1000);
         //const planeMaterial = new MeshBasicMaterial({color: 0xffffff});
 
         this.planeTexture = new TextureLoader().load(
@@ -78,11 +78,18 @@ class GameScene extends Scene {
         this.add(lights, plane, this.state.penguin);
 
         // Add the terrain.
-        this.terrainOne = new Terrain();
-        // Another terrain is always in front, and we keep generating more as the terrain
-        // move off screen behind us.
-        this.terrainTwo = new Terrain();
-        this.terrainTwo.position.z -= this.terrainOne.width;
+        this.terrainCount = 5;
+        this.terrain = new Array(this.terrainCount);
+        for (let i = 0; i < this.terrainCount; i++) {
+            this.terrain[i] = new Terrain();
+            if (i == 0) {
+                this.terrain[i].position.z = 0;
+            }
+            else {
+                this.terrain[i].position.z = this.terrain[i - 1].position.z - this.terrain[i - 1].length;
+            }
+            this.add(this.terrain[i]);
+        }
         
         this.add(this.terrainOne, this.terrainTwo);
 
@@ -236,15 +243,37 @@ class GameScene extends Scene {
         }
 
         // Move the terrain.
-        // this.terrainOne.position.z += 1;
-        // this.terrainTwo.position.z += 1;
-        // if (this.terrainOne.position.z >= this.terrainOne.width) {
-        //     console.log('new trr')
-        //     this.terrainOne = this.terrainTwo;
-        //     this.terrainTwo = new Terrain();
-        //     this.terrainTwo.position.z -= this.terrainOne.width;
-        // }
-        // console.log(window.selected);
+        for (let i = 0; i < this.terrain.length; i++) {
+            this.terrain[i].position.z += 0.2;
+        }
+        // If the nearest terrain goes off screen....
+        if (this.terrain[0].position.z > this.terrain[0].length) {
+            // Remove the nearest terrain.
+            this.remove(this.terrain[0]);
+
+            // Create a new terrain.
+            const terrainNew = new Terrain();
+
+            // Place it at the back.
+            terrainNew.position.z = this.terrain[this.terrain.length - 1].position.z - this.terrain[this.terrain.length - 1].length;
+            
+            // Shift the array around the place the nw terrain at the back.
+            this.terrain = this.terrain.slice(1);
+            this.terrain.push(terrainNew);
+
+            // Add back the new terrain.
+            this.add(terrainNew);
+        }
+        /*
+        if (this.terrainOne.position.z >= this.terrainOne.length) {
+            console.log("done")
+            this.remove(this.terrainOne);
+            this.terrainOne = this.terrainTwo;
+            this.terrainTwo = new Terrain();
+            this.terrainTwo.position.z -= this.terrainOne.length;
+            this.add(this.terrainTwo);
+        }*/
+
         if (this.state.gameOver) {
             window.gameShouldRun = false;
             let headID = document.getElementsByTagName('head')[0];
