@@ -198,14 +198,7 @@ document.body.appendChild(livesDiv);
 let powers = 3;
 let powerDiv = document.createElement('div');
 powerDiv.id = 'power';
-powerDiv.innerHTML = 'Powers:';
-for (let i = 0; i < powers; i++) {
-    let rainbowImg = document.createElement('img');
-    rainbowImg.src = rainbowPuffleLink;
-    rainbowImg.style.height = '30px';
-    rainbowImg.style.width = '30px';
-    powerDiv.appendChild(rainbowImg);
-}
+powerDiv.innerHTML = 'Boosts:';
 powerDiv.style.position = 'absolute';
 powerDiv.style.left = '28px';
 powerDiv.style.top = '60px';

@@ -138,7 +138,7 @@ class GameScene extends Scene {
             puffleImg.style.width = '30px';
             document.getElementById('lives').appendChild(puffleImg);
          }
-        document.getElementById('power').innerHTML = 'Powers: ';
+        document.getElementById('power').innerHTML = 'Boosts: ';
         for (let i = 0; i < this.state.powers; i++) {
             let rainbowImg = document.createElement('img');
             rainbowImg.src = rainbowPuffleLink;
@@ -148,27 +148,6 @@ class GameScene extends Scene {
         }
     }
 
-    // Update score, lives, and powers. If you press the key p, then use a power.
-    updateStats() {
-        this.state.score++;
-        document.getElementById('score').innerHTML = 'Score: ' + String(this.state.score);
-        document.getElementById('lives').innerHTML = 'Lives: ';
-        for (let i = 0; i < this.state.lives; i++) {
-            let puffleImg = document.createElement('img');
-            puffleImg.src = puffleLink;
-            puffleImg.style.height = '30px';
-            puffleImg.style.width = '30px';
-            document.getElementById('lives').appendChild(puffleImg);
-         }
-        document.getElementById('power').innerHTML = 'Powers: ';
-        for (let i = 0; i < this.state.powers; i++) {
-            let rainbowImg = document.createElement('img');
-            rainbowImg.src = rainbowPuffleLink;
-            rainbowImg.style.height = '30px';
-            rainbowImg.style.width = '30px';
-            document.getElementById('power').appendChild(rainbowImg);
-        }
-    }
 
     flip() {
         this.state.penguin.rotateY(Math.PI);
