@@ -6,14 +6,16 @@
  * handles window resizes.
  *
  */
-import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { GameScene } from 'scenes';
-//----
+ import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
+ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+ import { GameScene } from 'scenes';
+ import puffleLink from './components/scenes/puffle.png';
+ import rainbowPuffleLink from './components/scenes/rainbow_puffle.png';
+ import * as THREE from 'three';
+
     let gameScene;
     let startScene;
     let endScene;
-    console.log("here");
     let clicked = true;
     // camera.position.set(0, 5, 11);
     // camera.lookAt(new Vector3(0, 0, 0));
@@ -22,30 +24,8 @@ import { GameScene } from 'scenes';
     const camera = new PerspectiveCamera();
     const renderer = new WebGLRenderer({ antialias: true });
     // Set up camera
-    camera.position.set(6, 3, -10);
-    camera.lookAt(new Vector3(0, 0, 0));
     camera.position.set(0, 10, 25);
     camera.lookAt(new Vector3(0, 0, 0));
-
-// // Set up renderer, canvas, and minor CSS adjustments
-//     renderer.setPixelRatio(window.devicePixelRatio);
-//     const canvas = renderer.domElement;
-//     // canavs.style.innerHeight = 100;
-//     canvas.style.display = 'block'; // Removes padding below canvas
-//     document.body.style.margin = 0; // Removes margin around page
-//     document.body.style.overflow = 'hidden'; // Fix scrolling
-//     document.body.appendChild(canvas);
-
-//     // Set up controls
-//     const controls = new OrbitControls(camera, canvas);
-//     controls.enableDamping = true;
-//     controls.enablePan = false;
-//     controls.minDistance = 4;
-//     controls.maxDistance = 16;
-//     controls.update();
-
-    //-----html
-      //TODO: Add styles to header
 
     //source: https://github.com/dreamworld-426/dreamworld/blob/master/src/app.js
     let headID = document.getElementsByTagName('head')[0];
@@ -58,8 +38,8 @@ import { GameScene } from 'scenes';
     let box = document.createElement("DIV");
     box.id = 'LoadingPage';
     box.style.height = '100vh';
-    box.weigth = '100%';
-     // adapted from bootstrap docs
+    box.weight = '100%';
+    // adapted from bootstrap docs
     let html = '<style type="text/css">' +
     'body, p, h1, h2, h3, h4, h5, a' +
     '{ font-family:  Arial, Helvetica, sans-serif; }' +
@@ -72,7 +52,7 @@ import { GameScene } from 'scenes';
     '@media only screen and (min-width: 768px) { .p-large, { font-size: 1.4rem; } .display-4,.display-5 { font-size: 1.7rem; }}' +
     '@media only screen and (min-width: 992px) { .p-large { font-size: 1.8rem; } .display-4,.display-5 { font-size: 2.6rem; } } }' +
     '</style>' +
-    '<div class="container-fluid box text-center" style="background: linear-gradient(90deg, rgba(16,105,164,1) 0%, rgba(255,255,255,1) 100%);">' +
+    '<div class="container-fluid box text-center" style="height: 100vh; background: linear-gradient(90deg, rgba(16,105,164,1) 0%, rgba(255,255,255,1) 100%);">' +
     '<div class="text container p-5" style="color: white;">' +
     '<div class="jumbotron">' +
     // '<h1 class="display-4">Penguin Club</h1>' +
@@ -85,9 +65,9 @@ import { GameScene } from 'scenes';
 
     // '<a name ="keys"></a>' +
     '<h1 class="display-5 pt-2" style="text-shadow: 2px 2px 4px black;" >Penguin Club</h1>' +
-    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Use your keyboard arrows to move your penguin in a way that avoids the abstacles given. You can avoid obstacles by moving right, left, or jumping over it. If the penguin slides over the ice patches its speed increases.</p>' +
+    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Use your keyboard arrows to move your penguin in a way that avoids the obstacles given. You can avoid obstacles by moving right, left, or jumping over it. If the penguin slides over the ice patches its speed increases.</p>' +
     '<hr class="my-4">' +
-    '<div class="row"><div class="col"><span class="keys">^</span><p class="py-3">jump up</p></div></div>' +
+    '<div class="row"><div class="col"><span class="keys long">SPACE</span><p class="py-3">jump up</p></div></div>' +
     '<div class="row " style="padding-left:30%; padding-right:30%"><div class="col"><span><div class="float-sm-left"><span class="keys"><</span><p class="py-3">move left</p></div><div class="float-sm-right"><span class="keys">></span><p class="py-3">move right</p></div></span></div></div>' +
     '<div class="row"><div class="col">'+
     '<br>' +
@@ -112,7 +92,12 @@ import { GameScene } from 'scenes';
     let allKeys = document.getElementsByClassName("keys");
     for (let i = 0; i < allKeys.length; i++){
     allKeys[i].style.display = 'inline-block';
-    allKeys[i].style.width = '35px';
+    if (i == 0) {
+        allKeys[i].style.width = '200px';
+    }
+    else {
+        allKeys[i].style.width = '35px';
+    }
     allKeys[i].style.height = '35px';
     allKeys[i].style.border = '1px solid white';
     allKeys[i].style.borderRadius = '2px 2px 2px 2px';
@@ -134,158 +119,46 @@ window.gameShouldRun = false;
 window.onload=function(){
     document.querySelectorAll(".begin-btn").forEach(function(btn){
     btn.addEventListener("click", function(){
+    // Add music
+    const listener = new THREE.AudioListener();
+    // camera.add( listener );
+    const sound = new THREE.Audio( listener );
+    const audioLoader = new THREE.AudioLoader();
+    audioLoader.load( 'src/components/sounds/sled_racing.m4a', function( buffer ) {
+        sound.setBuffer( buffer );
+        sound.setLoop( true );
+        sound.setVolume( 0.5 );
+        sound.play();
+    });        
         window.gameShouldRun = true;
+        // window.selected = penguinSelect.value;
+        // console.log(window.selected);
         let loadingPage = document.getElementById('LoadingPage');
         document.body.removeChild(loadingPage);
         document.body.appendChild( VRButton.createButton( renderer ) );
         document.body.style.overflow = 'hidden'; // Fix scrolling
-        tour.start();
-      })
-      })
+        tour.start(); 
+    })
+    })
     }
 
 // Set up renderer, canvas, and minor CSS adjustments
-    renderer.setPixelRatio(window.devicePixelRatio);
-    const canvas = renderer.domElement;
-    // canavs.style.innerHeight = 100;
-    canvas.style.display = 'block'; // Removes padding below canvas
-    document.body.style.margin = 0; // Removes margin around page
-    document.body.style.overflow = 'hidden'; // Fix scrolling
-    document.body.appendChild(canvas);
+renderer.setPixelRatio(window.devicePixelRatio);
+const canvas = renderer.domElement;
+// canavs.style.innerHeight = 100;
+canvas.style.display = 'block'; // Removes padding below canvas
+document.body.style.margin = 0; // Removes margin around page
+document.body.style.overflow = 'hidden'; // Fix scrolling
+document.body.appendChild(canvas);
 
-    // Set up controls
-    const controls = new OrbitControls(camera, canvas);
-    controls.enableDamping = true;
-    controls.enablePan = false;
-    controls.minDistance = 4;
-    controls.maxDistance = 16;
-    controls.enabled = false;
-    controls.update();
-// window.onload=function(){
-//     var btn = document.getElementById('begin-btn'); 
-//     btn.onclick =  function() {
-//         clicked = true,
-//         document.body.appendChild(canvas)
-//     };
-//     // debugger;
-// }
-    // initGameScene();
-
-// function initStartScene() {
-//     const scene = new StartingScene();
-//     const camera = new PerspectiveCamera();
-//     const renderer = new WebGLRenderer({ antialias: true });
-
-//     camera.position.set(0, 5, 11);
-//     camera.lookAt(new Vector3(0, 0, 0));
-//     console.log("start scene called");
-
-// // Set up renderer, canvas, and minor CSS adjustments
-//     renderer.setPixelRatio(window.devicePixelRatio);
-//     const canvas = renderer.domElement;
-//     canvas.style.display = 'block'; // Removes padding below canvas
-//     document.body.style.margin = 0; // Removes margin around page
-//     document.body.style.overflow = 'hidden'; // Fix scrolling
-//     document.body.appendChild(canvas);
-
-//     // Set up controls
-//     const controls = new OrbitControls(camera, canvas);
-//     controls.enableDamping = true;
-//     controls.enablePan = false;
-//     controls.minDistance = 4;
-//     controls.maxDistance = 16;
-//     controls.update();
-
-//     // startedGame = false;
-// }
-
-// function initGameScene() {
-//     const scene = new GameScene();
-//     const camera = new PerspectiveCamera();
-//     const renderer = new WebGLRenderer({ antialias: true });
-
-//     camera.position.set(0, 5, 11);
-//     camera.lookAt(new Vector3(0, 0, 0));
-//     console.log("start scene called");
-
-// // Set up renderer, canvas, and minor CSS adjustments
-//     renderer.setPixelRatio(window.devicePixelRatio);
-//     const canvas = renderer.domElement;
-//     canvas.style.display = 'block'; // Removes padding below canvas
-//     document.body.style.margin = 0; // Removes margin around page
-//     document.body.style.overflow = 'hidden'; // Fix scrolling
-//     document.body.appendChild(canvas);
-
-//     // Set up controls
-//     const controls = new OrbitControls(camera, canvas);
-//     controls.enableDamping = true;
-//     controls.enablePan = false;
-//     controls.minDistance = 4;
-//     controls.maxDistance = 16;
-//     controls.update();
-
-// }
-
-
-//     //-----
-
-//     // Set up camera
-//     camera.position.set(0, 5, 11);
-//     camera.lookAt(new Vector3(0, 0, 0));
-//     console.log("set scene called");
-
-// // Set up renderer, canvas, and minor CSS adjustments
-//     renderer.setPixelRatio(window.devicePixelRatio);
-//     const canvas = renderer.domElement;
-//     canvas.style.display = 'block'; // Removes padding below canvas
-//     document.body.style.margin = 0; // Removes margin around page
-//     document.body.style.overflow = 'hidden'; // Fix scrolling
-//     document.body.appendChild(canvas);
-
-//     // Set up controls
-//     const controls = new OrbitControls(camera, canvas);
-//     controls.enableDamping = true;
-//     controls.enablePan = false;
-//     controls.minDistance = 4;
-//     controls.maxDistance = 16;
-//     controls.update();
-
-// function setScene(){
-// }
-// let clicked = true;
-
-// window.onload=function(){
-//     var btn = document.getElementById('begin-btn'); 
-//     btn.onclick =  function() {
-//         clicked = true,
-//         document.body.appendChild(canvas)
-//     };
-//     // debugger;
-// }
-//----
-
-// Render loop
-// const onAnimationFrameHandler = (timeStamp) => {
-//     if (clicked == true){
-//         controls.update();
-//         renderer.render(scene, camera);
-//         scene.update && scene.update(timeStamp);
-//         window.requestAnimationFrame(onAnimationFrameHandler);
-//     }
-// =======
-// Set up camera
-// camera.position.set(6, 3, -10);
-// camera.lookAt(new Vector3(0, 0, 0));
-// camera.position.set(0, 10, 25);
-// camera.lookAt(new Vector3(0, 0, 0));
-
-// Set up renderer, canvas, and minor CSS adjustments
-// renderer.setPixelRatio(window.devicePixelRatio);
-// const canvas = renderer.domElement;
-// canvas.style.display = 'block'; // Removes padding below canvas
-// document.body.style.margin = 0; // Removes margin around page
-// document.body.style.overflow = 'hidden'; // Fix scrolling
-// document.body.appendChild(canvas);
+// Set up controls
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+controls.enablePan = false;
+controls.minDistance = 4;
+controls.maxDistance = 16;
+// controls.enabled = false;
+controls.update();
 
 // Set up score
 let score = 0;
@@ -294,19 +167,44 @@ scoreDiv.id = 'score';
 scoreDiv.innerHTML = 'Score: ' + score;
 scoreDiv.style.position = 'absolute';
 scoreDiv.style.left = '28px'
-scoreDiv.style.top = '12px'
-scoreDiv.style.zIndex = '1000'
-scoreDiv.style.color = 'white'
-scoreDiv.style.fontSize = '3em'
+scoreDiv.style.top = '0px'
+scoreDiv.style.zIndex = '1000';
+scoreDiv.style.color = 'blue';
+scoreDiv.style.fontSize = '2em';
 document.body.appendChild(scoreDiv);
 
-// Set up controls
-// const controls = new OrbitControls(camera, canvas);
-// controls.enableDamping = true;
-// controls.enablePan = false;
-// controls.minDistance = 4;
-// controls.maxDistance = 16;
-// controls.update();
+// Set up lives
+let lives = 3;
+let livesDiv = document.createElement('div');
+livesDiv.id = 'lives';
+livesDiv.innerHTML = 'Lives:';
+for (let i = 0; i < lives; i++) {
+let puffleImg = document.createElement('img');
+puffleImg.src = puffleLink;
+puffleImg.style.height = '30px';
+puffleImg.style.width = '30px';
+livesDiv.appendChild(puffleImg);
+}
+
+livesDiv.style.position = 'absolute';
+livesDiv.style.left = '28px';
+livesDiv.style.top = '30px';
+livesDiv.style.zIndex = '1000';
+livesDiv.style.color = 'blue';
+livesDiv.style.fontSize = '2em';
+document.body.appendChild(livesDiv);
+
+// Set up invincibilities
+let powerDiv = document.createElement('div');
+powerDiv.id = 'power';
+powerDiv.innerHTML = 'Boosts:';
+powerDiv.style.position = 'absolute';
+powerDiv.style.left = '28px';
+powerDiv.style.top = '60px';
+powerDiv.style.zIndex = '1000';
+powerDiv.style.color = 'blue';
+powerDiv.style.fontSize = '2em';
+document.body.appendChild(powerDiv);
 
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
@@ -340,18 +238,3 @@ window.addEventListener("keyup", function(e) {
 // const slip = new AudioObject('src/components/sounds/slip.mp3', 0, 1, false);
 // scene.add(slip);
 
-// create an AudioListener and add it to the camera
-const listener = new THREE.AudioListener();
-camera.add( listener );
-
-// create a global audio source
-const sound = new THREE.Audio( listener );
-
-// load a sound and set it as the Audio object's buffer
-const audioLoader = new THREE.AudioLoader();
-audioLoader.load( 'src/components/sounds/sled_racing.m4a', function( buffer ) {
-	sound.setBuffer( buffer );
-	sound.setLoop( true );
-	sound.setVolume( 0.5 );
-	sound.play();
-});

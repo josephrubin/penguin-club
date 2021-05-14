@@ -71,6 +71,17 @@ class Fish extends THREE.Group {
         const penguinBox = new THREE.Box3().setFromObject(scene.state.penguin);
         const collision = hazardBox.intersectsBox(penguinBox);
         if (collision) {
+            // Add munching sound effect
+            const listener = new THREE.AudioListener();
+            // camera.add( listener );
+            const sound = new THREE.Audio( listener );
+            const audioLoader = new THREE.AudioLoader();
+            audioLoader.load( 'src/components/sounds/munch.m4a', function( buffer ) {
+                sound.setBuffer( buffer );
+                sound.setLoop( false );
+                sound.setVolume( 0.1 );
+                sound.play();
+            });  
             scene.state.score += 5000;
             const x = (Math.random() * 19) - 9.5;
             this.position.set(x, this.position.y, -125);
