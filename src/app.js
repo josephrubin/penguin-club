@@ -55,14 +55,9 @@
     '<div class="jumbotron">' +
 
     '<h1 class="display-5 pt-2" style="text-shadow: 2px 2px 4px black;" >Penguin Club</h1>' +
-    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Use your keyboard arrows to move your penguin in a way that avoids the obstacles given. You can avoid obstacles by moving right, left, or jumping over it. </p>' +
-    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Ice patches - speed increases </p>' +
-    '<p class="lead" style="text-shadow: 3px 3px 6px black;">3 lives</p>' +
-    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Lose a life - if collide with rocks, logs, and trees cause you to lose a life</p>' +
-    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Die - if collide with a seal</p>' +
-    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Score increase - time and eatting fish</p>' +
-    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Gain boost - eat a squid - can collide with rocks, logs, and trees without losing any lives </p>' +
-    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Customize your penguin by changing the color of the penguin or the tube, flipping the penguin, have the penguin spin, or using a boost.</p>' +
+    '<p class="lead" style="text-shadow: 2px 2px 4px black;">Use the space bar, left, and right keyboard buttons to navigate your penguin away from obstacles. You can avoid obstacles by moving right, left, or jumping over them. </p>' +
+    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Hazards and Rewards: If you slide over an ice patch, your speed will temporarily increase. If you hit a rock, log, or tree, you lose one of your three lives. If you hit a predatory seal, the game ends. Eating fish will increase your score. Eating a squid will give you a boost. If you use a boost, your tube will become rainbow colored and it will start to snow. If you hit a rock, tree, or log during boost mode, you do not lose a life. To use a boost, press the button on the top right. </p>' +
+    '<p class="lead" style="text-shadow: 3px 3px 6px black;">GUI: You can customize your penguin by changing the color of the penguin or the tube, flipping the penguin, or spinning the penguin by pressing the buttons on the top right.</p>' +
     '<hr class="my-4">' +
     '<div class="row"><div class="col"><span class="keys long">SPACE</span><p class="py-3">jump up</p></div></div>' +
     '<div class="row " style="padding-left:30%; padding-right:30%"><div class="col"><span><div class="float-sm-left"><span class="keys"><</span><p class="py-3">move left</p></div><div class="float-sm-right"><span class="keys">></span><p class="py-3">move right</p></div></span></div></div>' +
