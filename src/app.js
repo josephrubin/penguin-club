@@ -195,24 +195,16 @@ livesDiv.style.fontSize = '2em';
 document.body.appendChild(livesDiv);
 
 // Set up invincibilities
-let boosts = 3;
-let boostDiv = document.createElement('div');
-boostDiv.id = 'boost';
-boostDiv.innerHTML = 'Boosts:';
-for (let i = 0; i < boosts; i++) {
-    let rainbowImg = document.createElement('img');
-    rainbowImg.src = rainbowPuffleLink;
-    rainbowImg.style.height = '30px';
-    rainbowImg.style.width = '30px';
-    boostDiv.appendChild(rainbowImg);
-}
-boostDiv.style.position = 'absolute';
-boostDiv.style.left = '28px';
-boostDiv.style.top = '60px';
-boostDiv.style.zIndex = '1000';
-boostDiv.style.color = 'blue';
-boostDiv.style.fontSize = '2em';
-document.body.appendChild(boostDiv);
+let powerDiv = document.createElement('div');
+powerDiv.id = 'power';
+powerDiv.innerHTML = 'Boosts:';
+powerDiv.style.position = 'absolute';
+powerDiv.style.left = '28px';
+powerDiv.style.top = '60px';
+powerDiv.style.zIndex = '1000';
+powerDiv.style.color = 'blue';
+powerDiv.style.fontSize = '2em';
+document.body.appendChild(powerDiv);
 
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
