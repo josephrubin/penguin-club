@@ -37,6 +37,7 @@
     box.style.height = '100vh';
     box.weight = '100%';
     // adapted from bootstrap docs
+    //starting page html
     let html = '<style type="text/css">' +
     'body, p, h1, h2, h3, h4, h5, a' +
     '{ font-family:  Arial, Helvetica, sans-serif; }' +
@@ -117,7 +118,6 @@ window.onload=function(){
     btn.addEventListener("click", function(){
     // Add music
     const listener = new THREE.AudioListener();
-    // camera.add( listener );
     const sound = new THREE.Audio( listener );
     const audioLoader = new THREE.AudioLoader();
     audioLoader.load( 'src/components/sounds/sled_racing.m4a', function( buffer ) {
@@ -127,8 +127,6 @@ window.onload=function(){
         sound.play();
     });        
         window.gameShouldRun = true;
-        // window.selected = penguinSelect.value;
-        // console.log(window.selected);
         let loadingPage = document.getElementById('LoadingPage');
         document.body.removeChild(loadingPage);
         document.body.appendChild( VRButton.createButton( renderer ) );
