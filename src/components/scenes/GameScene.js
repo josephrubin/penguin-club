@@ -107,7 +107,7 @@ class GameScene extends Scene {
 
         // Menu for changing tube color
         let tubeFolder = this.state.gui.addFolder('Tube Color');
-        tubeFolder.add(this.state, 'tube_color', ['Red', 'Green', 'Blue', 'Black']).name('Tube Color').onChange(() => this.updatePenguinPenguin());
+        tubeFolder.add(this.state, 'tube_color', ['Red', 'Green', 'Blue', 'Black']).name('Tube Color').onChange(() => this.updatePenguinColor());
         tubeFolder.open();
 
         this.state.gui.add(this.state, 'flip');
@@ -162,7 +162,6 @@ class GameScene extends Scene {
             document.getElementById('boost').appendChild(rainbowImg);
         }
     }
-
 
     flip() {
         this.state.penguin.penguinObj.rotateY(Math.PI);
@@ -264,7 +263,7 @@ class GameScene extends Scene {
 
                     // Add either a rock, log, or tree
                     else if (select <= 0.8) {
-                        const hazard = new Hazard(this);
+                        const hazard = new Hazard(this, null);
                         this.addToUpdateList(hazard);
                         this.add(hazard);
                     }

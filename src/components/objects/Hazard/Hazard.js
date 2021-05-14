@@ -14,7 +14,7 @@ class Hazard extends THREE.Group {
             this.add(gltf.scene);
         });
         const x = (Math.random() * 19) - 9.5;
-        this.position.set(x, -1, -125);
+        this.position.set(x, -1, -150);
     }
 
     generateLog(loader) {
@@ -37,10 +37,10 @@ class Hazard extends THREE.Group {
             this.add(gltf.scene);
         });
         let x = -(Math.random() * 19);
-        this.position.set(x, -8, -125);
+        this.position.set(x, -8, -150);
     }
 
-    constructor(parent) {
+    constructor(parent, type) {
         // Call parent Group() constructor
         super();
 
@@ -53,13 +53,18 @@ class Hazard extends THREE.Group {
         // Load object
         const loader = new GLTFLoader();
 
-        // Randomly select one of three hazards, each with
-        // 1/3 chance of being generated
-        const random = Math.random();
-        if (random <= 0.33) this.generateLog(loader);
-        else if (random <= 0.67) this.generateTree(loader);
-        else this.generateRock(loader);
-        parent.addToUpdateList(this);
+        if (type === 'tree') this.generateTree(loader);
+        else if (type === 'log') this.generateLog(loader);
+        else if (type === 'rock') this.generateRock(loader);
+        else {
+            // Randomly select one of three hazards, each with
+            // 1/3 chance of being generated
+            const random = Math.random();
+            if (random <= 0.33) this.generateLog(loader);
+            else if (random <= 0.67) this.generateTree(loader);
+            else this.generateRock(loader);
+            parent.addToUpdateList(this);
+        }
     }
 
     update(timeStamp, scene) {
@@ -105,11 +110,11 @@ class Hazard extends THREE.Group {
                 // x is a random position (left to right) on the ramp
                 if (this.name === 'tree') {
                     const x = -(Math.random() * 19);
-                    this.position.set(x, this.position.y, -125);
+                    this.position.set(x, this.position.y, -150);
                 }
                 else {
                     const x = (Math.random() * 19) - 9.5;
-                    this.position.set(x, this.position.y, -125);
+                    this.position.set(x, this.position.y, -150);
                 }
                 
             }
