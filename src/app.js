@@ -17,9 +17,6 @@
     let startScene;
     let endScene;
     let clicked = true;
-    // camera.position.set(0, 5, 11);
-    // camera.lookAt(new Vector3(0, 0, 0));
-    // console.log("start scene called");
     const scene = new GameScene();
     const camera = new PerspectiveCamera();
     const renderer = new WebGLRenderer({ antialias: true });
@@ -55,17 +52,16 @@
     '<div class="container-fluid box text-center" style="height: 100vh; background: linear-gradient(90deg, rgba(16,105,164,1) 0%, rgba(255,255,255,1) 100%);">' +
     '<div class="text container p-5" style="color: white;">' +
     '<div class="jumbotron">' +
-    // '<h1 class="display-4">Penguin Club</h1>' +
-    // '<hr class="my-4">' +
-    // '<p class="p-large">Navigate your penguin down the slope</p>' +
-    // '<a class="btn btn-light btn-lg" href="#keys" role="button">Get Started</a>' +
-    // '<br>' +
-    // '<hr class="my-4">' +
-    // '<br>' +
 
-    // '<a name ="keys"></a>' +
     '<h1 class="display-5 pt-2" style="text-shadow: 2px 2px 4px black;" >Penguin Club</h1>' +
-    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Use your keyboard arrows to move your penguin in a way that avoids the obstacles given. You can avoid obstacles by moving right, left, or jumping over it. If the penguin slides over the ice patches its speed increases.</p>' +
+    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Use your keyboard arrows to move your penguin in a way that avoids the obstacles given. You can avoid obstacles by moving right, left, or jumping over it. </p>' +
+    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Ice patches - speed increases </p>' +
+    '<p class="lead" style="text-shadow: 3px 3px 6px black;">3 lives</p>' +
+    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Lose a life - if collide with rocks, logs, and trees cause you to lose a life</p>' +
+    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Die - if collide with a seal</p>' +
+    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Score increase - time and eatting fish</p>' +
+    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Gain boost - eat a squid - can collide with rocks, logs, and trees without losing any lives </p>' +
+    '<p class="lead" style="text-shadow: 3px 3px 6px black;">Customize your penguin by changing the color of the penguin or the tube, flipping the penguin, have the penguin spin, or using a boost.</p>' +
     '<hr class="my-4">' +
     '<div class="row"><div class="col"><span class="keys long">SPACE</span><p class="py-3">jump up</p></div></div>' +
     '<div class="row " style="padding-left:30%; padding-right:30%"><div class="col"><span><div class="float-sm-left"><span class="keys"><</span><p class="py-3">move left</p></div><div class="float-sm-right"><span class="keys">></span><p class="py-3">move right</p></div></span></div></div>' +
@@ -137,7 +133,6 @@ window.onload=function(){
         document.body.removeChild(loadingPage);
         document.body.appendChild( VRButton.createButton( renderer ) );
         document.body.style.overflow = 'hidden'; // Fix scrolling
-        tour.start(); 
     })
     })
     }
