@@ -107,13 +107,28 @@ class GameScene extends Scene {
 
         // Menu for changing tube color
         let tubeFolder = this.state.gui.addFolder('Tube Color');
-        tubeFolder.add(this.state, 'tube_color', ['Red', 'Green', 'Blue', 'Black']).name('Tube Color').onChange(() => this.updateTubePenguin());
+        tubeFolder.add(this.state, 'tube_color', ['Red', 'Green', 'Blue', 'Black']).name('Tube Color').onChange(() => this.updatePenguinPenguin());
         tubeFolder.open();
 
         this.state.gui.add(this.state, 'flip');
         this.state.gui.add(this.state, 'spin');
         this.state.gui.add(this.state, 'boost');
 
+        const initObjs = ['tree', 'rock', 'log', 'tree', 'rock', 'log'];
+        for (let i = 0; i < 6; i++) {
+            const hazard = new Hazard(this, initObjs[i]);
+            let x = (Math.random() * 19) - 9.5;
+            let y = 0;
+            if (hazard.name === 'tree') {
+                y = -8;
+                x = -(Math.random() * 19);
+            }
+            else if (hazard.name === 'rock') y = -1;
+            const z = -(Math.random() * (200 - 100) + 100);
+            hazard.position.set(x, y, z);
+            this.add(hazard);
+            this.addToUpdateList(hazard);
+        }
     }
 
     updatePenguinColor() {
