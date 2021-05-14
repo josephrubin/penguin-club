@@ -150,7 +150,7 @@ class GameScene extends Scene {
 
 
     flip() {
-        this.state.penguin.rotateY(Math.PI);
+        this.state.penguin.penguinObj.rotateY(Math.PI);
     }
 
     boost() {
