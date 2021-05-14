@@ -21,7 +21,7 @@ class MovingHazard extends THREE.Group {
             this.add(gltf.scene);
         });
 
-        this.position.set(0, 0, -125);
+        this.position.set(0, 0, -150);
 
         // Add self to parent's update list
         parent.addToUpdateList(this);
@@ -48,6 +48,11 @@ class MovingHazard extends THREE.Group {
             }
             else {
                 this.translateX(-0.01);
+            }
+
+            if (this.position.z > scene.state.cameraPosition.z) {
+                const x = -(Math.random() * 19);
+                this.position.set(x, this.position.y, -150);
             }
         }
 
