@@ -36,7 +36,7 @@ class GameScene extends Scene {
             maxSpeed: 0.5,
             score: 0, 
             lives: 3, 
-            powers: 1,
+            boosts: 1,
             flip: this.flip.bind(this),
             boost: this.boost.bind(this),
             spin: false, 
@@ -126,7 +126,7 @@ class GameScene extends Scene {
         this.addToUpdateList(this.state.penguin);
     }
 
-    // Update score, lives, and powers. If you press the key p, then use a power.
+    // Update score, lives, and boosts. If you press the key p, then use a boost.
     updateStats() {
         this.state.score++;
         document.getElementById('score').innerHTML = 'Score: ' + String(this.state.score);
@@ -144,7 +144,7 @@ class GameScene extends Scene {
             rainbowImg.src = rainbowPuffleLink;
             rainbowImg.style.height = '30px';
             rainbowImg.style.width = '30px';
-            document.getElementById('power').appendChild(rainbowImg);
+            document.getElementById('boost').appendChild(rainbowImg);
         }
     }
 

@@ -195,7 +195,6 @@ livesDiv.style.fontSize = '2em';
 document.body.appendChild(livesDiv);
 
 // Set up invincibilities
-let powers = 3;
 let powerDiv = document.createElement('div');
 powerDiv.id = 'power';
 powerDiv.innerHTML = 'Boosts:';
