@@ -218,7 +218,7 @@ class GameScene extends Scene {
         this.updateStats(event);
 
         // Rotate penguin
-        if (this.state.spin) {
+        if (this.state.spin && this.state.penguin && this.state.penguin.penguinObj) {
             this.state.penguin.penguinObj.rotateY(Math.PI/50);
         }
 
@@ -238,12 +238,12 @@ class GameScene extends Scene {
             if (!this.state.gameOver) {
                 // Randomly add hazards to the scene
                 if (random === 0) {
-                    // if (!this.state.addedSquid) {
-                    //     const squid = new Squid(this);
-                    //     this.addToUpdateList(squid);
-                    //     this.add(squid);
-                    //     this.state.addedSquid = true;
-                    // }
+                    if (!this.state.addedSquid) {
+                        const squid = new Squid(this);
+                        this.addToUpdateList(squid);
+                        this.add(squid);
+                        this.state.addedSquid = true;
+                    }
                     const fish = new Fish(this);
                     this.addToUpdateList(fish);
                     this.add(fish);
