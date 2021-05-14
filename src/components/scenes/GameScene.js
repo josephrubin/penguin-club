@@ -159,7 +159,7 @@ class GameScene extends Scene {
             rainbowImg.src = rainbowPuffleLink;
             rainbowImg.style.height = '30px';
             rainbowImg.style.width = '30px';
-            document.getElementById('boost').appendChild(rainbowImg);
+            document.getElementById('power').appendChild(rainbowImg);
         }
     }
 
@@ -212,13 +212,8 @@ class GameScene extends Scene {
 
         this.updateStats();
 
-        if (this.state.boostTime > 0) {
-            this.state.boostTime--;
-            const snow = new Snow(this);
-            this.add(snow);
-        }
         if (this.state.boostTime === 1) {
-            this.updateTubeColor();
+            this.updatePenguinColor();
         }
         this.updateStats(event);
 
@@ -300,8 +295,8 @@ class GameScene extends Scene {
 
         // Move the snow texture.
         if (!this.state.gameOver) {
-            this.planeTexture.offset.add(new Vector2(0, this.state.speed/5));
-            this.planeNormal.offset.add(new Vector2(0, this.state.speed/5));
+            this.planeTexture.offset.add(new Vector2(0, this.state.speed/10));
+            this.planeNormal.offset.add(new Vector2(0, this.state.speed/10));
             // Increase the speed as time passes
             if (Math.round(timeStamp) % 20 === 0 && this.state.speed <= this.state.maxSpeed) {
                 this.state.defaultSpeed += 0.001;

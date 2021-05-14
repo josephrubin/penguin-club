@@ -16,7 +16,7 @@ class Snow extends THREE.Group {
             this.velocity = new THREE.Vector3(0, 0, 0);
             this.mass = 10000;
             
-            const geometry = new THREE.SphereGeometry( 0.02, 10, 10 );
+            const geometry = new THREE.SphereBufferGeometry( 0.02, 10, 10 );
             const material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
             const sphere = new THREE.Mesh( geometry, material );
             this.add(sphere);

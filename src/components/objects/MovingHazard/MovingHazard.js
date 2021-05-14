@@ -51,7 +51,7 @@ class MovingHazard extends THREE.Group {
             }
 
             if (this.position.z > scene.state.cameraPosition.z) {
-                const x = -(Math.random() * 19);
+                const x = (Math.random() * 19) - 9.5;
                 this.position.set(x, this.position.y, -150);
             }
         }
