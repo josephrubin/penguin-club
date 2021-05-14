@@ -118,7 +118,7 @@ class Penguin extends THREE.Group {
         // Handle key inputs.
         if (scene.state.keys["ArrowLeft"]) {
             // Add sledding sound effect
-            if (this.slidingBuffer) {
+            if (this.slidingBuffer && this.onFloor) {
                 const listener = new THREE.AudioListener();
                 const sound = new THREE.Audio( listener );
                 sound.setBuffer( this.slidingBuffer );
@@ -132,7 +132,7 @@ class Penguin extends THREE.Group {
             movingLaterally = true;
         }
         if (scene.state.keys["ArrowRight"]) {
-            if (this.slidingBuffer) {
+            if (this.slidingBuffer && this.onFloor) {
                 const listener = new THREE.AudioListener();
                 const sound = new THREE.Audio( listener );
                 sound.setBuffer( this.slidingBuffer );
